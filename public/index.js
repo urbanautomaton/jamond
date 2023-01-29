@@ -4,9 +4,7 @@ mainGainNode.connect(audioContext.destination);
 mainGainNode.gain.value = 1.0;
 let note = null;
 
-const aKey = document.getElementById("A");
-
-const playTone = () => {
+const playTone = (freq) => {
   if (note !== null) {
     note.osc.stop();
   }
@@ -18,7 +16,7 @@ const playTone = () => {
   osc = audioContext.createOscillator();
   osc.connect(gainNode);
   osc.type = "sine";
-  osc.frequency.value = 220;
+  osc.frequency.value = freq;
 
   osc.start();
   gainNode.gain.setTargetAtTime(1.0, audioContext.currentTime, 0.005);
@@ -43,7 +41,7 @@ const handlePress = (e) => {
       if (!event.buttons & 1) {
         return;
       }
-      playTone();
+      playTone(e.target.dataset.frequency);
       break;
     case "mouseup":
       stopTone();
@@ -51,5 +49,7 @@ const handlePress = (e) => {
   }
 };
 
-aKey.addEventListener("mousedown", handlePress);
-aKey.addEventListener("mouseup", handlePress);
+Array.from(document.querySelectorAll(".key")).map((key) => {
+  key.addEventListener("mousedown", handlePress);
+  key.addEventListener("mouseup", handlePress);
+});

@@ -1,10 +1,15 @@
-const audioContext = new AudioContext();
-const mainGainNode = audioContext.createGain();
-mainGainNode.connect(audioContext.destination);
-mainGainNode.gain.value = 1.0;
+let audioContext = null;
+let mainGainNode = null;
 let note = null;
 
 const playTone = (freq) => {
+  if (audioContext === null) {
+    audioContext = new AudioContext();
+    mainGainNode = audioContext.createGain();
+    mainGainNode.connect(audioContext.destination);
+    mainGainNode.gain.value = 1.0;
+  }
+
   if (note !== null) {
     note.osc.stop();
   }

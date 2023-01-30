@@ -1,44 +1,60 @@
-let audioContext = null;
-let mainGainNode = null;
-let note = null;
-
-const playTone = (freq) => {
-  if (audioContext === null) {
-    audioContext = new AudioContext();
-    mainGainNode = audioContext.createGain();
-    mainGainNode.connect(audioContext.destination);
-    mainGainNode.gain.value = 1.0;
+class Hammond {
+  constructor() {
+    this.audioContext = null;
+    this.mainGainNode = null;
+    this.note = null;
   }
 
-  if (note !== null) {
-    note.osc.stop();
+  setup() {
+    if (this.audioContext === null) {
+      this.audioContext = new AudioContext();
+      this.mainGainNode = this.audioContext.createGain();
+      this.mainGainNode.connect(this.audioContext.destination);
+      this.mainGainNode.gain.value = 1.0;
+    }
   }
 
-  gainNode = audioContext.createGain();
-  gainNode.connect(mainGainNode);
-  gainNode.gain.value = 0;
+  playTone(freq) {
+    this.setup();
 
-  osc = audioContext.createOscillator();
-  osc.connect(gainNode);
-  osc.type = "sine";
-  osc.frequency.value = freq;
+    if (this.note !== null) {
+      this.note.osc.stop();
+    }
 
-  osc.start();
-  gainNode.gain.setTargetAtTime(1.0, audioContext.currentTime, 0.005);
+    const gainNode = this.audioContext.createGain();
+    gainNode.connect(this.mainGainNode);
+    gainNode.gain.value = 0;
 
-  note = { osc, gainNode };
-};
+    const osc = this.audioContext.createOscillator();
+    osc.connect(gainNode);
+    osc.type = "sine";
+    osc.frequency.value = freq;
 
-const stopTone = () => {
-  if (note !== null) {
-    note.gainNode.gain.setTargetAtTime(0, audioContext.currentTime, 0.005);
-    let osc = note.osc;
-    setTimeout(() => {
-      osc.stop();
-    }, 100);
-    note = null;
+    osc.start();
+    gainNode.gain.setTargetAtTime(1.0, this.audioContext.currentTime, 0.005);
+
+    this.note = { osc, gainNode };
   }
-};
+
+  stopTone() {
+    this.setup();
+
+    if (this.note !== null) {
+      this.note.gainNode.gain.setTargetAtTime(
+        0,
+        this.audioContext.currentTime,
+        0.005
+      );
+      let osc = this.note.osc;
+      setTimeout(() => {
+        osc.stop();
+      }, 100);
+      this.note = null;
+    }
+  }
+}
+
+const hammond = new Hammond();
 
 const onKeyPress = (e) => {
   if (!(e.buttons & 1)) {
@@ -46,14 +62,14 @@ const onKeyPress = (e) => {
   }
 
   if (e.currentTarget.dataset.frequency) {
-    playTone(e.currentTarget.dataset.frequency);
+    hammond.playTone(e.currentTarget.dataset.frequency);
   }
 
   e.preventDefault();
 };
 
 const onKeyRelease = (e) => {
-  stopTone();
+  hammond.stopTone();
 };
 
 const keyboard = document.getElementById("keyboard");

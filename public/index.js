@@ -1,6 +1,6 @@
 const hammond = new Hammond();
 
-const onKeyPress = (e) => {
+const onKeyDown = (e) => {
   if (!(e.buttons & 1)) {
     return true;
   }
@@ -14,7 +14,7 @@ const onKeyPress = (e) => {
   e.preventDefault();
 };
 
-const onKeyRelease = (e) => {
+const onKeyUp = (e) => {
   if (e.currentTarget.classList.contains("key")) {
     e.currentTarget.classList.remove("pressed");
     hammond.keyUp();
@@ -36,10 +36,10 @@ hammond.eachManualKey(({ octave, key }) => {
   labelElement.innerHTML = `${key}<sub>${octave}</sub>`;
   keyElement.appendChild(labelElement);
 
-  keyElement.addEventListener("mousedown", onKeyPress, false);
-  keyElement.addEventListener("mouseenter", onKeyPress, false);
-  keyElement.addEventListener("mouseup", onKeyRelease, false);
-  keyElement.addEventListener("mouseleave", onKeyRelease, false);
+  keyElement.addEventListener("mousedown", onKeyDown, false);
+  keyElement.addEventListener("mouseenter", onKeyDown, false);
+  keyElement.addEventListener("mouseup", onKeyUp, false);
+  keyElement.addEventListener("mouseleave", onKeyUp, false);
 
   keyboard.appendChild(keyElement);
 });

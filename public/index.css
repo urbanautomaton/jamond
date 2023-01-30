@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 .header {
   margin: 0.5em;
   background-color: silver;
@@ -5,10 +9,11 @@
 
 .key {
   position: relative;
+  float: left;
   display: inline-block;
   padding: 0.2em;
-  width: 1.5em;
-  height: 5em;
+  width: 2em;
+  height: 8em;
   border: 1px solid grey;
 }
 
@@ -21,10 +26,21 @@
   text-align: center;
 }
 
+.white {
+  z-index: 1;
+}
+
 .black {
+  z-index: 2;
   background-color: black;
   color: white;
-  width: 0.75em;
+  width: 1em;
+  margin-left: -0.5em;
+  height: 5em;
+}
+
+.black + .white {
+  margin-left: -0.5em;
 }
 
 .black div {

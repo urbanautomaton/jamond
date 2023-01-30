@@ -28,6 +28,7 @@ eachNote(
     keyElement.className = `key ${letter.length > 1 && "black"}`;
     Object.assign(keyElement.dataset, { octave, letter, frequency });
 
+    labelElement.className = "label";
     labelElement.innerHTML = `${letter}<sub>${octave}</sub>`;
     keyElement.appendChild(labelElement);
 

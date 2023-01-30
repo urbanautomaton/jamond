@@ -43,10 +43,12 @@ const stopTone = () => {
 const handlePress = (e) => {
   switch (e.type) {
     case "mousedown":
-      if (!event.buttons & 1) {
-        return;
+      if (!(e.buttons & 1)) {
+        return true;
       }
-      playTone(e.target.dataset.frequency);
+      if (e.currentTarget.dataset.frequency) {
+        playTone(e.currentTarget.dataset.frequency);
+      }
       break;
     case "mouseup":
       stopTone();
@@ -54,7 +56,24 @@ const handlePress = (e) => {
   }
 };
 
-Array.from(document.querySelectorAll(".key")).map((key) => {
-  key.addEventListener("mousedown", handlePress);
-  key.addEventListener("mouseup", handlePress);
-});
+const keyboard = document.getElementById("keyboard");
+
+eachNote(
+  { octave: 2, letter: "C" },
+  { octave: 7, letter: "C" },
+  ({ octave, letter, frequency }) => {
+    const keyElement = document.createElement("div");
+    const labelElement = document.createElement("div");
+
+    keyElement.className = `key ${letter.length > 1 && "black"}`;
+    Object.assign(keyElement.dataset, { octave, letter, frequency });
+
+    labelElement.innerHTML = `${letter}<sub>${octave}</sub>`;
+    keyElement.appendChild(labelElement);
+
+    keyElement.addEventListener("mousedown", handlePress, false);
+    keyElement.addEventListener("mouseup", handlePress, false);
+
+    keyboard.appendChild(keyElement);
+  }
+);

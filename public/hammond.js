@@ -10,7 +10,7 @@ class Hammond {
       this.audioContext = new AudioContext();
       this.mainGainNode = this.audioContext.createGain();
       this.mainGainNode.connect(this.audioContext.destination);
-      this.mainGainNode.gain.value = 1.0;
+      this.mainGainNode.gain.value = 0.5;
     }
   }
 

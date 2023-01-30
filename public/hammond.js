@@ -31,7 +31,7 @@ class Hammond {
     osc.frequency.value = freq;
 
     osc.start();
-    gainNode.gain.setTargetAtTime(1.0, this.audioContext.currentTime, 0.005);
+    gainNode.gain.setTargetAtTime(1.0, this.audioContext.currentTime, 0.01);
 
     this.note = { osc, gainNode };
   }
@@ -43,7 +43,7 @@ class Hammond {
       this.note.gainNode.gain.setTargetAtTime(
         0,
         this.audioContext.currentTime,
-        0.005
+        0.01
       );
       let osc = this.note.osc;
       setTimeout(() => {

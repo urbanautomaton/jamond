@@ -40,20 +40,20 @@ const stopTone = () => {
   }
 };
 
-const handlePress = (e) => {
-  switch (e.type) {
-    case "mousedown":
-      if (!(e.buttons & 1)) {
-        return true;
-      }
-      if (e.currentTarget.dataset.frequency) {
-        playTone(e.currentTarget.dataset.frequency);
-      }
-      break;
-    case "mouseup":
-      stopTone();
-      break;
+const onKeyPress = (e) => {
+  if (!(e.buttons & 1)) {
+    return true;
   }
+
+  if (e.currentTarget.dataset.frequency) {
+    playTone(e.currentTarget.dataset.frequency);
+  }
+
+  e.preventDefault();
+};
+
+const onKeyRelease = (e) => {
+  stopTone();
 };
 
 const keyboard = document.getElementById("keyboard");
@@ -71,8 +71,10 @@ eachNote(
     labelElement.innerHTML = `${letter}<sub>${octave}</sub>`;
     keyElement.appendChild(labelElement);
 
-    keyElement.addEventListener("mousedown", handlePress, false);
-    keyElement.addEventListener("mouseup", handlePress, false);
+    keyElement.addEventListener("mousedown", onKeyPress, false);
+    keyElement.addEventListener("mouseenter", onKeyPress, false);
+    keyElement.addEventListener("mouseup", onKeyRelease, false);
+    keyElement.addEventListener("mouseleave", onKeyRelease, false);
 
     keyboard.appendChild(keyElement);
   }

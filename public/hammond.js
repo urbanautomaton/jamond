@@ -166,4 +166,11 @@ class Hammond {
       this.note = null;
     }
   }
+
+  eachManualKey(cb) {
+    for (let i = 12; i <= 72; i++) {
+      const { octave, tone: key } = toneWheels[i];
+      cb({ octave, key });
+    }
+  }
 }

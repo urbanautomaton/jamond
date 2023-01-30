@@ -23,27 +23,23 @@ const onKeyRelease = (e) => {
 
 const keyboard = document.getElementById("keyboard");
 
-eachNote(
-  { octave: 2, key: "C" },
-  { octave: 7, key: "C" },
-  ({ octave, key }) => {
-    const keyElement = document.createElement("div");
-    const labelElement = document.createElement("div");
-    const keyClassname = key.toLowerCase().replaceAll("#", "s");
-    const keyColor = key.length > 1 ? "black" : "white";
+hammond.eachManualKey(({ octave, key }) => {
+  const keyElement = document.createElement("div");
+  const labelElement = document.createElement("div");
+  const keyClassname = key.toLowerCase().replaceAll("#", "s");
+  const keyColor = key.length > 1 ? "black" : "white";
 
-    keyElement.className = `key ${keyClassname} ${keyColor}`;
-    Object.assign(keyElement.dataset, { octave, key });
+  keyElement.className = `key ${keyClassname} ${keyColor}`;
+  Object.assign(keyElement.dataset, { octave, key });
 
-    labelElement.className = "label";
-    labelElement.innerHTML = `${key}<sub>${octave}</sub>`;
-    keyElement.appendChild(labelElement);
+  labelElement.className = "label";
+  labelElement.innerHTML = `${key}<sub>${octave}</sub>`;
+  keyElement.appendChild(labelElement);
 
-    keyElement.addEventListener("mousedown", onKeyPress, false);
-    keyElement.addEventListener("mouseenter", onKeyPress, false);
-    keyElement.addEventListener("mouseup", onKeyRelease, false);
-    keyElement.addEventListener("mouseleave", onKeyRelease, false);
+  keyElement.addEventListener("mousedown", onKeyPress, false);
+  keyElement.addEventListener("mouseenter", onKeyPress, false);
+  keyElement.addEventListener("mouseup", onKeyRelease, false);
+  keyElement.addEventListener("mouseleave", onKeyRelease, false);
 
-    keyboard.appendChild(keyElement);
-  }
-);
+  keyboard.appendChild(keyElement);
+});

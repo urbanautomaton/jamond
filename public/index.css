@@ -9,6 +9,7 @@
 
 .key {
   position: relative;
+  cursor: pointer;
   float: left;
   display: inline-block;
   padding: 0.2em;
@@ -27,7 +28,13 @@
 }
 
 .white {
+  color: grey;
+  background-color: white;
   z-index: 1;
+}
+
+.white:hover {
+  background-color: #ddd;
 }
 
 .black {
@@ -37,6 +44,10 @@
   width: 1em;
   margin-left: -0.5em;
   height: 5em;
+}
+
+.black:hover {
+  background-color: #333;
 }
 
 .black + .white {

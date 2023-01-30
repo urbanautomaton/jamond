@@ -5,7 +5,8 @@ const onKeyPress = (e) => {
     return true;
   }
 
-  if (e.currentTarget.dataset.frequency) {
+  if (e.currentTarget.classList.contains("key")) {
+    e.currentTarget.classList.add("pressed");
     hammond.playTone(e.currentTarget.dataset.frequency);
   }
 
@@ -13,7 +14,10 @@ const onKeyPress = (e) => {
 };
 
 const onKeyRelease = (e) => {
-  hammond.stopTone();
+  if (e.currentTarget.classList.contains("key")) {
+    e.currentTarget.classList.remove("pressed");
+    hammond.stopTone();
+  }
 };
 
 const keyboard = document.getElementById("keyboard");
@@ -24,8 +28,10 @@ eachNote(
   ({ octave, letter, frequency }) => {
     const keyElement = document.createElement("div");
     const labelElement = document.createElement("div");
+    const keyClassname = letter.toLowerCase().replaceAll("#", "s");
+    const keyColor = letter.length > 1 ? "black" : "white";
 
-    keyElement.className = `key ${letter.length > 1 && "black"}`;
+    keyElement.className = `key ${keyClassname} ${keyColor}`;
     Object.assign(keyElement.dataset, { octave, letter, frequency });
 
     labelElement.className = "label";

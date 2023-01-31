@@ -37,6 +37,7 @@ body {
   color: grey;
   background-color: white;
   z-index: 1;
+  border-radius: 0 0 0.3em 0.3em;
 }
 
 .black {
@@ -46,6 +47,7 @@ body {
   width: 1em;
   margin-left: -0.5em;
   height: 5em;
+  border-radius: 0 0 0.2em 0.2em;
 }
 
 .white:hover {

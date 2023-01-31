@@ -150,7 +150,7 @@ class Hammond {
     this.note = { osc, gainNode };
   }
 
-  keyUp() {
+  keyUp({ octave, key }) {
     this.setup();
 
     if (this.note !== null) {

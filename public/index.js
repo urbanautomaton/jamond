@@ -13,8 +13,9 @@ const onKeyDown = (e) => {
 };
 
 const onKeyUp = (e) => {
+  const { octave, key } = e.currentTarget.dataset;
   e.currentTarget.classList.remove("pressed");
-  hammond.keyUp();
+  hammond.keyUp({ octave, key });
 
   e.preventDefault();
 };

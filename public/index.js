@@ -5,20 +5,18 @@ const onKeyDown = (e) => {
     return true;
   }
 
-  if (e.currentTarget.classList.contains("key")) {
-    const { octave, key } = e.currentTarget.dataset;
-    e.currentTarget.classList.add("pressed");
-    hammond.keyDown({ octave, key });
-  }
+  const { octave, key } = e.currentTarget.dataset;
+  e.currentTarget.classList.add("pressed");
+  hammond.keyDown({ octave, key });
 
   e.preventDefault();
 };
 
 const onKeyUp = (e) => {
-  if (e.currentTarget.classList.contains("key")) {
-    e.currentTarget.classList.remove("pressed");
-    hammond.keyUp();
-  }
+  e.currentTarget.classList.remove("pressed");
+  hammond.keyUp();
+
+  e.preventDefault();
 };
 
 const keyboard = document.getElementById("keyboard");

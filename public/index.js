@@ -1,3 +1,5 @@
+import Hammond from "./modules/hammond.js";
+
 const hammond = new Hammond();
 
 const onKeyDown = (e) => {

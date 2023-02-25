@@ -174,3 +174,5 @@ class Hammond {
     }
   }
 }
+
+export default Hammond;

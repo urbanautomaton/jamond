@@ -40,8 +40,9 @@ body {
 }
 
 .key .label {
+  display: none;
   position: absolute;
-  bottom: 0;
+  bottom: -2em;
   left: 0;
   right: 0;
   width: 100%;

@@ -113,7 +113,7 @@ class Hammond {
   constructor() {
     this.audioContext = null;
     this.mainGainNode = null;
-    this.note = null;
+    this.keysPressed = new Set();
   }
 
   setup() {
@@ -122,49 +122,60 @@ class Hammond {
       this.mainGainNode = this.audioContext.createGain();
       this.mainGainNode.connect(this.audioContext.destination);
       this.mainGainNode.gain.value = 0.5;
+
+      toneWheels.forEach((toneWheel) => {
+        const gainNode = this.audioContext.createGain();
+        gainNode.connect(this.mainGainNode);
+        gainNode.gain.value = 0;
+
+        const osc = this.audioContext.createOscillator();
+        osc.connect(gainNode);
+        osc.type = "sine";
+        osc.frequency.value = toneWheel.frequency;
+        osc.start();
+
+        toneWheel.osc = osc;
+        toneWheel.gainNode = gainNode;
+      });
     }
+  }
+
+  updateGains() {
+    const gains = {};
+
+    this.keysPressed.forEach((keyIndex) => {
+      gains[keyIndex] = 1.0;
+    });
+
+    toneWheels.forEach(({ gainNode }, index) => {
+      const gain = gains[index] || 0.0;
+
+      gainNode.gain.setTargetAtTime(gain, this.audioContext.currentTime, 0.01);
+    });
+  }
+
+  keyIndex({ octave, key }) {
+    return (octave - 1) * 12 + octaveKeys.indexOf(key);
   }
 
   keyDown({ octave, key }) {
     this.setup();
 
-    if (this.note !== null) {
-      this.note.osc.stop();
-    }
+    this.keysPressed.add(this.keyIndex({ octave, key }));
 
-    const toneWheelIndex = (octave - 1) * 12 + octaveKeys.indexOf(key);
-    const toneWheel = toneWheels[toneWheelIndex];
-
-    const gainNode = this.audioContext.createGain();
-    gainNode.connect(this.mainGainNode);
-    gainNode.gain.value = 0;
-
-    const osc = this.audioContext.createOscillator();
-    osc.connect(gainNode);
-    osc.type = "sine";
-    osc.frequency.value = toneWheel.frequency;
-
-    osc.start();
-    gainNode.gain.setTargetAtTime(1.0, this.audioContext.currentTime, 0.01);
-
-    this.note = { osc, gainNode };
+    this.updateGains();
   }
 
   keyUp({ octave, key }) {
+    if (this.keysPressed.size === 0) {
+      return;
+    }
+
     this.setup();
 
-    if (this.note !== null) {
-      this.note.gainNode.gain.setTargetAtTime(
-        0,
-        this.audioContext.currentTime,
-        0.01
-      );
-      let osc = this.note.osc;
-      setTimeout(() => {
-        osc.stop();
-      }, 100);
-      this.note = null;
-    }
+    this.keysPressed.delete(this.keyIndex({ octave, key }));
+
+    this.updateGains();
   }
 
   eachManualKey(cb) {

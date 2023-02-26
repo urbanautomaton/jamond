@@ -7,17 +7,17 @@ const onKeyDown = (e) => {
     return true;
   }
 
-  const { octave, key } = e.currentTarget.dataset;
+  const { midiNote } = e.currentTarget.dataset;
   e.currentTarget.classList.add("pressed");
-  hammond.keyDown({ octave, key });
+  hammond.playMidiNote(midiNote);
 
   e.preventDefault();
 };
 
 const onKeyUp = (e) => {
-  const { octave, key } = e.currentTarget.dataset;
+  const { midiNote } = e.currentTarget.dataset;
   e.currentTarget.classList.remove("pressed");
-  hammond.keyUp({ octave, key });
+  hammond.stopMidiNote(midiNote);
 
   e.preventDefault();
 };
@@ -48,17 +48,17 @@ hammond.eachDrawBar(({ label, value }, index) => {
   drawBars.appendChild(drawBarContainer);
 });
 
-hammond.eachManualKey(({ octave, key }) => {
+hammond.eachManualKey(({ midiNote, octave, name }) => {
   const keyElement = document.createElement("div");
   const labelElement = document.createElement("div");
-  const keyClassname = key.toLowerCase().replaceAll("#", "s");
-  const keyColor = key.length > 1 ? "black" : "white";
+  const keyClassname = name.toLowerCase().replaceAll("#", "s");
+  const keyColor = name.length > 1 ? "black" : "white";
 
   keyElement.className = `key ${keyClassname} ${keyColor}`;
-  Object.assign(keyElement.dataset, { octave, key });
+  Object.assign(keyElement.dataset, { midiNote });
 
   labelElement.className = "label";
-  labelElement.innerHTML = `${key}<sub>${octave}</sub>`;
+  labelElement.innerHTML = `${name}<sub>${octave}</sub>`;
   keyElement.appendChild(labelElement);
 
   keyElement.addEventListener("mousedown", onKeyDown, false);
@@ -70,31 +70,31 @@ hammond.eachManualKey(({ octave, key }) => {
 });
 
 const keyMap = {
-  a: { octave: 4, key: "C" },
-  w: { octave: 4, key: "C#" },
-  s: { octave: 4, key: "D" },
-  e: { octave: 4, key: "D#" },
-  d: { octave: 4, key: "E" },
-  f: { octave: 4, key: "F" },
-  t: { octave: 4, key: "F#" },
-  g: { octave: 4, key: "G" },
-  y: { octave: 4, key: "G#" },
-  h: { octave: 4, key: "A" },
-  u: { octave: 4, key: "A#" },
-  j: { octave: 4, key: "B" },
-  k: { octave: 5, key: "C" },
+  a: { midiNote: 60 },
+  w: { midiNote: 61 },
+  s: { midiNote: 62 },
+  e: { midiNote: 63 },
+  d: { midiNote: 64 },
+  f: { midiNote: 65 },
+  t: { midiNote: 66 },
+  g: { midiNote: 67 },
+  y: { midiNote: 68 },
+  h: { midiNote: 69 },
+  u: { midiNote: 70 },
+  j: { midiNote: 71 },
+  k: { midiNote: 72 },
 };
 
 document.addEventListener(
   "keydown",
   (e) => {
-    const key = keyMap[e.key];
+    if (keyMap.hasOwnProperty(e.key)) {
+      const { midiNote } = keyMap[e.key];
 
-    if (key) {
       keys
-        .querySelector(`[data-octave="${key.octave}"][data-key="${key.key}"]`)
+        .querySelector(`[data-midi-note="${midiNote}"]`)
         .classList.add("pressed");
-      hammond.keyDown(key);
+      hammond.playMidiNote(midiNote);
     }
   },
   false
@@ -103,13 +103,13 @@ document.addEventListener(
 document.addEventListener(
   "keyup",
   (e) => {
-    const key = keyMap[e.key];
+    if (keyMap.hasOwnProperty(e.key)) {
+      const { midiNote } = keyMap[e.key];
 
-    if (key) {
       keys
-        .querySelector(`[data-octave="${key.octave}"][data-key="${key.key}"]`)
+        .querySelector(`[data-midi-note="${midiNote}"]`)
         .classList.remove("pressed");
-      hammond.keyUp(key);
+      hammond.stopMidiNote(midiNote);
     }
   },
   false

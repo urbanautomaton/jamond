@@ -35,7 +35,6 @@ body {
   float: left;
   display: inline-block;
   padding: 0.2em;
-  width: 2em;
   height: 8em;
 }
 
@@ -51,6 +50,7 @@ body {
 
 .white {
   color: grey;
+  width: 1.75em;
   z-index: 1;
   border-left: 1px solid #bbb;
   border-bottom: 1px solid #bbb;

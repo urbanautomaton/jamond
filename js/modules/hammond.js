@@ -115,6 +115,17 @@ class Hammond {
     this.audioContext = null;
     this.mainGainNode = null;
     this.keysPressed = new Set();
+    this.drawBars = [
+      { offset: -12, gain: 1.0 },
+      { offset: 7, gain: 1.0 },
+      { offset: 0, gain: 1.0 },
+      { offset: 12, gain: 1.0 },
+      { offset: 19, gain: 1.0 },
+      { offset: 24, gain: 1.0 },
+      { offset: 28, gain: 1.0 },
+      { offset: 31, gain: 1.0 },
+      { offset: 36, gain: 1.0 },
+    ];
   }
 
   init() {
@@ -123,7 +134,7 @@ class Hammond {
       this.audioContext = new AudioContext();
       this.mainGainNode = this.audioContext.createGain();
       this.mainGainNode.connect(this.audioContext.destination);
-      this.mainGainNode.gain.value = 0.5;
+      this.mainGainNode.gain.value = 0.05;
 
       toneWheels.forEach((toneWheel) => {
         const gainNode = this.audioContext.createGain();
@@ -146,7 +157,9 @@ class Hammond {
     const gains = {};
 
     this.keysPressed.forEach((keyIndex) => {
-      gains[keyIndex] = 1.0;
+      this.drawBars.forEach(({ offset, gain }) => {
+        gains[keyIndex + offset] = gain;
+      });
     });
 
     toneWheels.forEach(({ gainNode }, index) => {

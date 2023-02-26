@@ -68,3 +68,49 @@ hammond.eachManualKey(({ octave, key }) => {
 
   keys.appendChild(keyElement);
 });
+
+const keyMap = {
+  a: { octave: 4, key: "C" },
+  w: { octave: 4, key: "C#" },
+  s: { octave: 4, key: "D" },
+  e: { octave: 4, key: "D#" },
+  d: { octave: 4, key: "E" },
+  f: { octave: 4, key: "F" },
+  t: { octave: 4, key: "F#" },
+  g: { octave: 4, key: "G" },
+  y: { octave: 4, key: "G#" },
+  h: { octave: 4, key: "A" },
+  u: { octave: 4, key: "A#" },
+  j: { octave: 4, key: "B" },
+  k: { octave: 5, key: "C" },
+};
+
+document.addEventListener(
+  "keydown",
+  (e) => {
+    const key = keyMap[e.key];
+
+    if (key) {
+      keys
+        .querySelector(`[data-octave="${key.octave}"][data-key="${key.key}"]`)
+        .classList.add("pressed");
+      hammond.keyDown(key);
+    }
+  },
+  false
+);
+
+document.addEventListener(
+  "keyup",
+  (e) => {
+    const key = keyMap[e.key];
+
+    if (key) {
+      keys
+        .querySelector(`[data-octave="${key.octave}"][data-key="${key.key}"]`)
+        .classList.remove("pressed");
+      hammond.keyUp(key);
+    }
+  },
+  false
+);

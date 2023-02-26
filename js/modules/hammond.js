@@ -116,15 +116,15 @@ class Hammond {
     this.mainGainNode = null;
     this.keysPressed = new Set();
     this.drawBars = [
-      { offset: -12, gain: 1.0 },
-      { offset: 7, gain: 1.0 },
-      { offset: 0, gain: 1.0 },
-      { offset: 12, gain: 1.0 },
-      { offset: 19, gain: 1.0 },
-      { offset: 24, gain: 1.0 },
-      { offset: 28, gain: 1.0 },
-      { offset: 31, gain: 1.0 },
-      { offset: 36, gain: 1.0 },
+      { offset: -12, value: 8 },
+      { offset: 7, value: 8 },
+      { offset: 0, value: 8 },
+      { offset: 12, value: 8 },
+      { offset: 19, value: 8 },
+      { offset: 24, value: 8 },
+      { offset: 28, value: 8 },
+      { offset: 31, value: 8 },
+      { offset: 36, value: 8 },
     ];
   }
 
@@ -157,8 +157,8 @@ class Hammond {
     const gains = {};
 
     this.keysPressed.forEach((keyIndex) => {
-      this.drawBars.forEach(({ offset, gain }) => {
-        gains[keyIndex + offset] = gain;
+      this.drawBars.forEach(({ offset, value }) => {
+        gains[keyIndex + offset] = value / 8.0;
       });
     });
 

@@ -23,6 +23,30 @@ const onKeyUp = (e) => {
 };
 
 const keyboard = document.getElementById("keyboard");
+const drawBars = keyboard.querySelector(".drawbars");
+const keys = keyboard.querySelector(".keys");
+
+hammond.eachDrawBar(({ label, value }, index) => {
+  const drawBarContainer = document.createElement("div");
+  drawBarContainer.className = "drawbar";
+  const drawBarLabel = document.createElement("label");
+  drawBarLabel.innerText = label;
+  const drawBarRange = document.createElement("input");
+  drawBarRange.setAttribute("type", "range");
+  drawBarRange.setAttribute("min", 0);
+  drawBarRange.setAttribute("max", 8);
+  drawBarRange.setAttribute("value", value);
+  drawBarRange.addEventListener(
+    "change",
+    (e) => {
+      hammond.setDrawBar(index, e.currentTarget.value);
+    },
+    false
+  );
+  drawBarLabel.appendChild(drawBarRange);
+  drawBarContainer.appendChild(drawBarLabel);
+  drawBars.appendChild(drawBarContainer);
+});
 
 hammond.eachManualKey(({ octave, key }) => {
   const keyElement = document.createElement("div");
@@ -42,5 +66,5 @@ hammond.eachManualKey(({ octave, key }) => {
   keyElement.addEventListener("mouseup", onKeyUp, false);
   keyElement.addEventListener("mouseleave", onKeyUp, false);
 
-  keyboard.appendChild(keyElement);
+  keys.appendChild(keyElement);
 });

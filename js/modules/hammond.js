@@ -116,15 +116,15 @@ class Hammond {
     this.mainGainNode = null;
     this.keysPressed = new Set();
     this.drawBars = [
-      { offset: -12, value: 8 },
-      { offset: 7, value: 8 },
-      { offset: 0, value: 8 },
-      { offset: 12, value: 8 },
-      { offset: 19, value: 8 },
-      { offset: 24, value: 8 },
-      { offset: 28, value: 8 },
-      { offset: 31, value: 8 },
-      { offset: 36, value: 8 },
+      { label: "16'", offset: -12, value: 8 },
+      { label: "5⅓'", offset: 7, value: 8 },
+      { label: "8'", offset: 0, value: 8 },
+      { label: "4'", offset: 12, value: 8 },
+      { label: "2⅔'", offset: 19, value: 8 },
+      { label: "2'", offset: 24, value: 8 },
+      { label: "1⅗'", offset: 28, value: 8 },
+      { label: "1⅓'", offset: 31, value: 8 },
+      { label: "1'", offset: 36, value: 8 },
     ];
   }
 
@@ -187,11 +187,21 @@ class Hammond {
     }
   }
 
+  setDrawBar(index, value) {
+    this.drawBars[index].value = value;
+  }
+
   eachManualKey(cb) {
     for (let i = 12; i <= 72; i++) {
       const { octave, tone: key } = toneWheels[i];
       cb({ octave, key });
     }
+  }
+
+  eachDrawBar(cb) {
+    this.drawBars.forEach((bar, index) => {
+      cb(bar, index);
+    });
   }
 }
 

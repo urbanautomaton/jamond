@@ -95,3 +95,7 @@ body {
 .black .label {
   display: none;
 }
+
+.drawbar label {
+  color: white;
+}

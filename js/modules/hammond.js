@@ -111,13 +111,15 @@ const toneWheels = [
 
 class Hammond {
   constructor() {
+    this.initialized = false;
     this.audioContext = null;
     this.mainGainNode = null;
     this.keysPressed = new Set();
   }
 
-  setup() {
-    if (this.audioContext === null) {
+  init() {
+    if (!this.initialized) {
+      this.initialized = true;
       this.audioContext = new AudioContext();
       this.mainGainNode = this.audioContext.createGain();
       this.mainGainNode.connect(this.audioContext.destination);
@@ -159,23 +161,17 @@ class Hammond {
   }
 
   keyDown({ octave, key }) {
-    this.setup();
+    this.init();
 
     this.keysPressed.add(this.keyIndex({ octave, key }));
-
     this.updateGains();
   }
 
   keyUp({ octave, key }) {
-    if (this.keysPressed.size === 0) {
-      return;
+    if (this.initialized) {
+      this.keysPressed.delete(this.keyIndex({ octave, key }));
+      this.updateGains();
     }
-
-    this.setup();
-
-    this.keysPressed.delete(this.keyIndex({ octave, key }));
-
-    this.updateGains();
   }
 
   eachManualKey(cb) {

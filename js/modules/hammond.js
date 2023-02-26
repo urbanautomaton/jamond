@@ -7,15 +7,15 @@ class Hammond {
     this.mainGainNode = null;
     this.notesPlaying = new Set();
     this.drawBars = [
-      { label: "16'", offset: -12, value: 8 },
-      { label: "5⅓'", offset: 7, value: 8 },
-      { label: "8'", offset: 0, value: 8 },
-      { label: "4'", offset: 12, value: 8 },
-      { label: "2⅔'", offset: 19, value: 8 },
-      { label: "2'", offset: 24, value: 8 },
-      { label: "1⅗'", offset: 28, value: 8 },
-      { label: "1⅓'", offset: 31, value: 8 },
-      { label: "1'", offset: 36, value: 8 },
+      { label: "16'", offset: -12, value: 8, color: "brown" },
+      { label: "5⅓'", offset: 7, value: 8, color: "brown" },
+      { label: "8'", offset: 0, value: 8, color: "white" },
+      { label: "4'", offset: 12, value: 8, color: "white" },
+      { label: "2⅔'", offset: 19, value: 8, color: "black" },
+      { label: "2'", offset: 24, value: 8, color: "white" },
+      { label: "1⅗'", offset: 28, value: 8, color: "black" },
+      { label: "1⅓'", offset: 31, value: 8, color: "black" },
+      { label: "1'", offset: 36, value: 8, color: "white" },
     ];
   }
 

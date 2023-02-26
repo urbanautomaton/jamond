@@ -26,25 +26,39 @@ const keyboard = document.getElementById("keyboard");
 const drawBars = keyboard.querySelector(".drawbars");
 const keys = keyboard.querySelector(".keys");
 
-hammond.eachDrawBar(({ label, value }, index) => {
+hammond.eachDrawBar(({ label, value, color }, index) => {
   const drawBarContainer = document.createElement("div");
   drawBarContainer.className = "drawbar";
-  const drawBarLabel = document.createElement("label");
-  drawBarLabel.innerText = label;
-  const drawBarRange = document.createElement("input");
-  drawBarRange.setAttribute("type", "range");
-  drawBarRange.setAttribute("min", 0);
-  drawBarRange.setAttribute("max", 8);
-  drawBarRange.setAttribute("value", value);
-  drawBarRange.addEventListener(
-    "change",
-    (e) => {
-      hammond.setDrawBar(index, e.currentTarget.value);
-    },
-    false
-  );
-  drawBarLabel.appendChild(drawBarRange);
-  drawBarContainer.appendChild(drawBarLabel);
+  const drawBarTrack = document.createElement("div");
+  drawBarTrack.classList.add("drawbar-track");
+  for (let i = 0; i < 8; i++) {
+    const segment = document.createElement("div");
+    segment.classList.add("drawbar-track-segment");
+    segment.innerText = 8 - i;
+    drawBarTrack.appendChild(segment);
+    if (i < index) {
+      segment.classList.add("hidden");
+    }
+  }
+  drawBarContainer.appendChild(drawBarTrack);
+  const drawBarThumb = document.createElement("div");
+  drawBarThumb.innerText = label;
+  drawBarThumb.classList.add("drawbar-thumb");
+  drawBarThumb.classList.add(color);
+  drawBarContainer.appendChild(drawBarThumb);
+  // const drawBarRange = document.createElement("input");
+  // drawBarRange.setAttribute("type", "range");
+  // drawBarRange.setAttribute("min", 0);
+  // drawBarRange.setAttribute("max", 8);
+  // drawBarRange.setAttribute("value", value);
+  // drawBarRange.addEventListener(
+  //   "change",
+  //   (e) => {
+  //     hammond.setDrawBar(index, e.currentTarget.value);
+  //   },
+  //   false
+  // );
+  // drawBarContainer.appendChild(drawBarRange);
   drawBars.appendChild(drawBarContainer);
 });
 

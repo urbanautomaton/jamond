@@ -23,17 +23,22 @@ const buildDrawBar = (container) => {
 
 class Drawbar {
   constructor(container) {
-    this.container = container;
     buildDrawBar(container);
-    this.segmentHeight = container
-      .querySelector(".drawbar-track-segment")
-      .getBoundingClientRect().height;
-    this.value = 8;
+
+    container.addEventListener("mousedown", (e) => this.startDrag(e));
+    container.addEventListener("mousemove", (e) => this.move(e));
+    container.addEventListener("mouseleave", (e) => this.stopDrag(e));
+    container.addEventListener("mouseup", (e) => this.stopDrag(e));
+
+    this.container = container;
     this.dragging = false;
-    this.container.addEventListener("mousedown", (e) => this.startDrag(e));
-    this.container.addEventListener("mousemove", (e) => this.move(e));
-    this.container.addEventListener("mouseleave", (e) => this.stopDrag(e));
-    this.container.addEventListener("mouseup", (e) => this.stopDrag(e));
+
+    window.setTimeout(() => {
+      this.segmentHeight = container
+        .querySelector(".drawbar-track-segment")
+        .getBoundingClientRect().height;
+      this.setValue(8);
+    }, 0);
   }
 
   startDrag(e) {
@@ -71,6 +76,7 @@ class Drawbar {
 
   setValue(value) {
     this.value = clampValue(value);
+    this.container.dataset.value = this.value;
 
     this.container.scrollTo({
       top: Math.ceil((8 - this.value) * this.segmentHeight),
@@ -79,5 +85,4 @@ class Drawbar {
   }
 }
 
-document.querySelectorAll(".drawbar").forEach((el) => new Drawbar(el));
-// new Drawbar(document.querySelector(".drawbar"));
+export default Drawbar;

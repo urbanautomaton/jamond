@@ -1,10 +1,13 @@
 .drawbars {
-  border: 1px solid red;
   margin: 0.5em 0;
   display: flex;
   flex-direction: row;
   font-size: 0.9rem;
-  height: 15.25em;
+  --track-width: 1.75em;
+  --track-segment-height: 1.15em;
+  --thumb-width: 2.25em;
+  --thumb-height: 3.25em;
+  height: calc(8 * var(--track-segment-height) + 3.25em);
 }
 
 .drawbar {
@@ -20,23 +23,23 @@
 }
 
 .drawbar-track-segment {
-  width: 1.75em;
-  line-height: 1.5em;
+  width: var(--track-width);
+  line-height: var(--track-segment-height);
   color: #efdcd6;
   text-align: center;
   user-select: none;
-  border-left: 0.2em solid #efdcd6;
-  border-right: 0.2em solid #efdcd6;
+  border-left: 0.3em solid #efdcd6;
+  border-right: 0.3em solid #efdcd6;
   background: #312d29;
 }
 
 .drawbar-thumb {
-  width: 2.25em;
-  height: 3.25em;
-  line-height: 3.25em;
+  width: var(--thumb-width);
+  height: var(--thumb-height);
+  line-height: var(--thumb-height);
   text-align: center;
   cursor: pointer;
-  margin-bottom: calc(8 * 1.75em);
+  margin-bottom: calc(8 * var(--track-segment-height));
 }
 
 .drawbar.dragging .drawbar-thumb {

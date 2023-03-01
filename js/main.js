@@ -27,10 +27,10 @@ const keyboard = document.getElementById("keyboard");
 const drawbars = keyboard.querySelector(".drawbars");
 const keys = keyboard.querySelector(".keys");
 
-hammond.eachDrawbar(({ label, value, color }, index) => {
+hammond.eachDrawbar(({ label, value, color }, setValue) => {
   const drawbarContainer = document.createElement("div");
   drawbarContainer.className = `drawbar ${color}`;
-  new Drawbar(drawbarContainer);
+  new Drawbar(drawbarContainer, label, setValue);
   drawbars.appendChild(drawbarContainer);
 });
 

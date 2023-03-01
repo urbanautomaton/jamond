@@ -1,6 +1,6 @@
 const clampValue = (value) => Math.min(Math.max(value, 0), 8);
 
-const buildDrawBar = (container) => {
+const buildDrawBar = (container, label) => {
   const scroller = document.createElement("div");
   scroller.classList.add("drawbar-scroller");
   container.appendChild(scroller);
@@ -11,6 +11,7 @@ const buildDrawBar = (container) => {
 
   const thumb = document.createElement("div");
   thumb.classList.add("drawbar-thumb");
+  thumb.innerText = label;
   scroller.appendChild(thumb);
 
   for (var i = 0; i < 8; i++) {
@@ -22,8 +23,8 @@ const buildDrawBar = (container) => {
 };
 
 class Drawbar {
-  constructor(container) {
-    buildDrawBar(container);
+  constructor(container, label, onChange) {
+    buildDrawBar(container, label);
 
     container.addEventListener("mousedown", (e) => this.startDrag(e));
     container.addEventListener("mousemove", (e) => this.move(e));
@@ -32,6 +33,7 @@ class Drawbar {
 
     this.container = container;
     this.dragging = false;
+    this.onChange = onChange;
 
     window.setTimeout(() => {
       this.segmentHeight = container
@@ -77,6 +79,10 @@ class Drawbar {
   setValue(value) {
     this.value = clampValue(value);
     this.container.dataset.value = this.value;
+
+    if (this.onChange) {
+      this.onChange(this.value);
+    }
 
     this.container.scrollTo({
       top: Math.ceil((8 - this.value) * this.segmentHeight),

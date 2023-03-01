@@ -88,7 +88,7 @@ class Hammond {
 
   eachDrawbar(cb) {
     this.drawbars.forEach((bar, index) => {
-      cb(bar, index);
+      cb(bar, (value) => this.setDrawbar(index, value));
     });
   }
 }

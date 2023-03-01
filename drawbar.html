@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>A web audio hammond organ</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cabin&display=swap"
+      rel="stylesheet"
+    />
+
+    <link href="index.css" rel="stylesheet" />
+    <link href="drawbar.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        A hammond organ simulator attempt. This header exists exclusively to
+        convince Chrome that I do not require it to translate my hammond organ
+        from Arabic.
+      </div>
+      <div id="keyboard" class="keyboard">
+        <div id="upper-manual">
+          <div class="drawbars">
+            <div class="drawbar-container">
+              <div class="drawbar">
+                <div class="drawbar-track">
+                  <div class="drawbar-track-segment">8</div>
+                  <div class="drawbar-track-segment">7</div>
+                  <div class="drawbar-track-segment">6</div>
+                  <div class="drawbar-track-segment">5</div>
+                  <div class="drawbar-track-segment">4</div>
+                  <div class="drawbar-track-segment">3</div>
+                  <div class="drawbar-track-segment">2</div>
+                  <div class="drawbar-track-segment">1</div>
+                </div>
+                <div class="drawbar-thumb brown"></div>
+                <div class="drawbar-track-hidden">
+                  <div class="drawbar-track-segment">8</div>
+                  <div class="drawbar-track-segment">7</div>
+                  <div class="drawbar-track-segment">6</div>
+                  <div class="drawbar-track-segment">5</div>
+                  <div class="drawbar-track-segment">4</div>
+                  <div class="drawbar-track-segment">3</div>
+                  <div class="drawbar-track-segment">2</div>
+                  <div class="drawbar-track-segment">1</div>
+                </div>
+              </div>
+            </div>
+            <div class="drawbar-container">
+              <div class="drawbar">
+                <div class="drawbar-track">
+                  <div class="drawbar-track-segment">8</div>
+                  <div class="drawbar-track-segment">7</div>
+                  <div class="drawbar-track-segment">6</div>
+                  <div class="drawbar-track-segment">5</div>
+                  <div class="drawbar-track-segment">4</div>
+                  <div class="drawbar-track-segment">3</div>
+                  <div class="drawbar-track-segment">2</div>
+                  <div class="drawbar-track-segment">1</div>
+                </div>
+                <div class="drawbar-thumb brown"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="js/drawbar.js"></script>
+  </body>
+</html>

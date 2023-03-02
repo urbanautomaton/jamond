@@ -1,5 +1,7 @@
 import toneWheels from "./toneWheels.js";
 
+const hasKeyForNote = (midiNote) => midiNote >= 36 && midiNote <= 96;
+
 class Hammond {
   constructor() {
     this.initialized = false;
@@ -65,8 +67,10 @@ class Hammond {
   playMidiNote(midiNote) {
     this.init();
 
-    this.notesPlaying.add(midiNote);
-    this.updateGains();
+    if (hasKeyForNote(midiNote)) {
+      this.notesPlaying.add(midiNote);
+      this.updateGains();
+    }
   }
 
   stopMidiNote(midiNote) {

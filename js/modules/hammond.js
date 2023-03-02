@@ -6,16 +6,16 @@ class Hammond {
     this.audioContext = null;
     this.mainGainNode = null;
     this.notesPlaying = new Set();
-    this.drawBars = [
-      { label: "16'", offset: -12, value: 8 },
-      { label: "5⅓'", offset: 7, value: 8 },
-      { label: "8'", offset: 0, value: 8 },
-      { label: "4'", offset: 12, value: 8 },
-      { label: "2⅔'", offset: 19, value: 8 },
-      { label: "2'", offset: 24, value: 8 },
-      { label: "1⅗'", offset: 28, value: 8 },
-      { label: "1⅓'", offset: 31, value: 8 },
-      { label: "1'", offset: 36, value: 8 },
+    this.drawbars = [
+      { label: "16'", offset: -12, value: 8, color: "brown" },
+      { label: "5⅓'", offset: 7, value: 8, color: "brown" },
+      { label: "8'", offset: 0, value: 8, color: "white" },
+      { label: "4'", offset: 12, value: 8, color: "white" },
+      { label: "2⅔'", offset: 19, value: 8, color: "black" },
+      { label: "2'", offset: 24, value: 8, color: "white" },
+      { label: "1⅗'", offset: 28, value: 8, color: "black" },
+      { label: "1⅓'", offset: 31, value: 8, color: "black" },
+      { label: "1'", offset: 36, value: 8, color: "white" },
     ];
   }
 
@@ -50,7 +50,7 @@ class Hammond {
     this.notesPlaying.forEach((midiNote) => {
       const toneIndex = midiNote - toneWheels[0].midiNote;
 
-      this.drawBars.forEach(({ offset, value }) => {
+      this.drawbars.forEach(({ offset, value }) => {
         gains[toneIndex + offset] = value / 8.0;
       });
     });
@@ -76,8 +76,8 @@ class Hammond {
     }
   }
 
-  setDrawBar(index, value) {
-    this.drawBars[index].value = value;
+  setDrawbar(index, value) {
+    this.drawbars[index].value = value;
   }
 
   eachManualKey(cb) {
@@ -86,9 +86,9 @@ class Hammond {
     }
   }
 
-  eachDrawBar(cb) {
-    this.drawBars.forEach((bar, index) => {
-      cb(bar, index);
+  eachDrawbar(cb) {
+    this.drawbars.forEach((bar, index) => {
+      cb(bar, (value) => this.setDrawbar(index, value));
     });
   }
 }

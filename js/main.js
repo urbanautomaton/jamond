@@ -1,31 +1,39 @@
 import Hammond from "./modules/hammond.js";
 import Drawbar from "./modules/drawbar.js";
 
+const keyboard = document.getElementById("keyboard");
+const drawbars = keyboard.querySelector(".drawbars");
+const keys = keyboard.querySelector(".keys");
+
 const hammond = new Hammond();
+
+const playMidiNote = (midiNote) => {
+  keys.querySelector(`[data-midi-note="${midiNote}"]`).classList.add("pressed");
+  hammond.playMidiNote(midiNote);
+};
+
+const stopMidiNote = (midiNote) => {
+  keys
+    .querySelector(`[data-midi-note="${midiNote}"]`)
+    .classList.remove("pressed");
+  hammond.stopMidiNote(midiNote);
+};
 
 const onKeyDown = (e) => {
   if (!(e.buttons & 1)) {
     return true;
   }
 
-  const { midiNote } = e.currentTarget.dataset;
-  e.currentTarget.classList.add("pressed");
-  hammond.playMidiNote(midiNote);
+  playMidiNote(e.currentTarget.dataset.midiNote);
 
   e.preventDefault();
 };
 
 const onKeyUp = (e) => {
-  const { midiNote } = e.currentTarget.dataset;
-  e.currentTarget.classList.remove("pressed");
-  hammond.stopMidiNote(midiNote);
+  stopMidiNote(e.currentTarget.dataset.midiNote);
 
   e.preventDefault();
 };
-
-const keyboard = document.getElementById("keyboard");
-const drawbars = keyboard.querySelector(".drawbars");
-const keys = keyboard.querySelector(".keys");
 
 hammond.eachDrawbar(({ label, value, color }, setValue) => {
   const drawbarContainer = document.createElement("div");
@@ -75,12 +83,7 @@ document.addEventListener(
   "keydown",
   (e) => {
     if (keyMap.hasOwnProperty(e.key)) {
-      const { midiNote } = keyMap[e.key];
-
-      keys
-        .querySelector(`[data-midi-note="${midiNote}"]`)
-        .classList.add("pressed");
-      hammond.playMidiNote(midiNote);
+      playMidiNote(keyMap[e.key].midiNote);
     }
   },
   false
@@ -90,12 +93,7 @@ document.addEventListener(
   "keyup",
   (e) => {
     if (keyMap.hasOwnProperty(e.key)) {
-      const { midiNote } = keyMap[e.key];
-
-      keys
-        .querySelector(`[data-midi-note="${midiNote}"]`)
-        .classList.remove("pressed");
-      hammond.stopMidiNote(midiNote);
+      stopMidiNote(keyMap[e.key].midiNote);
     }
   },
   false

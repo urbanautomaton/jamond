@@ -7,7 +7,7 @@
   --track-segment-height: 1.15em;
   --thumb-width: 2.25em;
   --thumb-height: 3.25em;
-  height: calc(8 * var(--track-segment-height) + 3.25em);
+  height: calc(8 * var(--track-segment-height) + var(--thumb-height));
 }
 
 .drawbar {

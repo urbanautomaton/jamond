@@ -38,6 +38,7 @@
   height: var(--thumb-height);
   line-height: var(--thumb-height);
   text-align: center;
+  user-select: none;
   cursor: pointer;
   margin-bottom: calc(8 * var(--track-segment-height));
 }

@@ -41,3 +41,7 @@ new Synth(controller);
 new HammondUI(document.getElementById("keyboard"), controller);
 new KeyboardHammondInput(controller);
 new MidiHammondInput(controller);
+
+Drawbars.forEach((bar, index) => {
+  controller.setDrawbar(index, 8);
+});

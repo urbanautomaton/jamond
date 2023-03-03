@@ -16,9 +16,7 @@ class HammondUI {
     Drawbars.forEach(({ label, color }, index) => {
       const drawbarContainer = document.createElement("div");
       drawbarContainer.className = `drawbar ${color}`;
-      new Drawbar(drawbarContainer, label, (value) =>
-        this.controller.setDrawbar(index, value)
-      );
+      new Drawbar(drawbarContainer, label, index, controller);
       drawbars.appendChild(drawbarContainer);
     });
 

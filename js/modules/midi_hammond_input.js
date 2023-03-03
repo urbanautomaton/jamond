@@ -14,7 +14,7 @@ class MidiHammondInput {
       return;
     }
 
-    navigator.requestMIDIAccess().then(
+    navigator.requestMIDIAccess({ sysex: true }).then(
       (midiAccess) => {
         this.midiAccess = midiAccess;
         this.midiAccess.inputs.forEach((entry) => {

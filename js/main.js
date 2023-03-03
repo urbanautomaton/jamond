@@ -1,5 +1,6 @@
 import Hammond from "./modules/hammond.js";
 import Drawbar from "./modules/drawbar.js";
+import MidiHammondInput from "./modules/midi_hammond_input.js";
 
 const keyboard = document.getElementById("keyboard");
 const drawbars = keyboard.querySelector(".drawbars");
@@ -99,72 +100,4 @@ document.addEventListener(
   false
 );
 
-let midi = null; // global MIDIAccess object
-
-function listInputsAndOutputs(midiAccess) {
-  for (const entry of midiAccess.inputs) {
-    const input = entry[1];
-    console.log(
-      `Input port [type:'${input.type}']` +
-        ` id:'${input.id}'` +
-        ` manufacturer:'${input.manufacturer}'` +
-        ` name:'${input.name}'` +
-        ` version:'${input.version}'`
-    );
-  }
-
-  for (const entry of midiAccess.outputs) {
-    const output = entry[1];
-    console.log(
-      `Output port [type:'${output.type}'] id:'${output.id}' manufacturer:'${output.manufacturer}' name:'${output.name}' version:'${output.version}'`
-    );
-  }
-}
-
-const MidiCommands = {
-  NOTE_ON: 0x90,
-  NOTE_OFF: 0x80,
-};
-
-function onMIDIMessage(event) {
-  let str = `MIDI message received at timestamp ${event.timeStamp}[${event.data.length} bytes]: `;
-  const command = event.data[0];
-  const note = event.data[1];
-  const velocity = event.data[2] || 0;
-
-  switch (command) {
-    case MidiCommands.NOTE_ON:
-      if (velocity > 0) {
-        playMidiNote(note);
-      } else {
-        stopMidiNote(note);
-      }
-      break;
-    case MidiCommands.NOTE_OFF:
-      stopMidiNote(note);
-      break;
-  }
-  for (const character of event.data) {
-    str += `0x${character.toString(16)} `;
-  }
-  console.log(str);
-}
-
-function startLoggingMIDIInput(midiAccess) {
-  midiAccess.inputs.forEach((entry) => {
-    entry.onmidimessage = onMIDIMessage;
-  });
-}
-
-function onMIDISuccess(midiAccess) {
-  console.log("MIDI ready!");
-  midi = midiAccess; // store in the global (in real usage, would probably keep in an object instance)
-  listInputsAndOutputs(midiAccess);
-  startLoggingMIDIInput(midiAccess);
-}
-
-function onMIDIFailure(msg) {
-  console.error(`Failed to get MIDI access - ${msg}`);
-}
-
-navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
+new MidiHammondInput({ playMidiNote, stopMidiNote });

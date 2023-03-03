@@ -19,13 +19,21 @@ class Synth {
     ];
   }
 
+  normalizeMainGain() {
+    if (this.mainGainNode !== null) {
+      const drawbarSum = this.drawbars.reduce((acc, bar) => acc + bar.value, 0);
+
+      this.mainGainNode.gain.value = 0.5 / drawbarSum;
+    }
+  }
+
   init() {
     if (!this.initialized) {
       this.initialized = true;
       this.audioContext = new AudioContext();
       this.mainGainNode = this.audioContext.createGain();
       this.mainGainNode.connect(this.audioContext.destination);
-      this.mainGainNode.gain.value = 0.05;
+      this.normalizeMainGain();
       this.toneWheels = ToneWheels.map(({ frequency }) => {
         const gainNode = this.audioContext.createGain();
         gainNode.connect(this.mainGainNode);
@@ -82,6 +90,7 @@ class Synth {
 
   setDrawbar(index, value) {
     this.drawbars[index].value = value;
+    this.normalizeMainGain();
   }
 
   eachDrawbar(cb) {

@@ -1,5 +1,7 @@
 import toneWheels from "./tone_wheels.js";
 
+export const ManualKeys = toneWheels.slice(12, 72);
+
 const hasKeyForNote = (midiNote) => midiNote >= 36 && midiNote <= 96;
 
 class Synth {
@@ -82,12 +84,6 @@ class Synth {
 
   setDrawbar(index, value) {
     this.drawbars[index].value = value;
-  }
-
-  eachManualKey(cb) {
-    for (let i = 12; i <= 72; i++) {
-      cb(toneWheels[i]);
-    }
   }
 
   eachDrawbar(cb) {

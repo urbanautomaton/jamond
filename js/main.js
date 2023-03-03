@@ -1,4 +1,4 @@
-import Synth from "./modules/synth.js";
+import Synth, { ManualKeys } from "./modules/synth.js";
 import Drawbar from "./modules/drawbar.js";
 import MidiHammondInput from "./modules/midi_hammond_input.js";
 import KeyboardHammondInput from "./modules/keyboard_hammond_input.js";
@@ -44,7 +44,7 @@ synth.eachDrawbar(({ label, value, color }, setValue) => {
   drawbars.appendChild(drawbarContainer);
 });
 
-synth.eachManualKey(({ midiNote, octave, name }) => {
+ManualKeys.forEach(({ midiNote, octave, name }) => {
   const keyElement = document.createElement("div");
   const labelElement = document.createElement("div");
   const keyClassname = name.toLowerCase().replaceAll("#", "s");

@@ -1,60 +1,60 @@
 import { ManualKeys, Drawbars } from "./definitions.js";
 import Drawbar from "./drawbar.js";
 
+const div = ({ className, parent }, cb = () => {}) => {
+  const element = document.createElement("div");
+  element.className = className;
+  parent.appendChild(element);
+  cb(element);
+  return element;
+};
+
 class HammondUI {
   constructor(container, controller) {
     this.container = container;
     this.controller = controller;
 
-    const drawbars = document.createElement("div");
-    drawbars.className = "drawbars";
-    const keys = document.createElement("div");
-    keys.className = "keys";
-    container.appendChild(drawbars);
-    container.appendChild(keys);
-
-    Drawbars.forEach(({ label, color }, index) => {
-      const drawbarContainer = document.createElement("div");
-      drawbarContainer.className = `drawbar ${color}`;
-      new Drawbar(drawbarContainer, label, index, controller);
-      drawbars.appendChild(drawbarContainer);
+    div({ className: "drawbars", parent: container }, (drawbars) => {
+      Drawbars.forEach(({ label, color }, index) => {
+        div({ className: `drawbar ${color}`, parent: drawbars }, (drawbar) => {
+          new Drawbar(drawbar, label, index, controller);
+        });
+      });
     });
 
-    ManualKeys.forEach(({ midiNote, octave, name }) => {
-      const keyElement = document.createElement("div");
-      const labelElement = document.createElement("div");
-      const keyClassname = name.toLowerCase().replaceAll("#", "s");
-      const keyColor = name.length > 1 ? "black" : "white";
+    div({ className: "keys", parent: container }, (keys) => {
+      this.controller.on("playmidinote", (midiNote) => {
+        keys
+          .querySelector(`[data-midi-note="${midiNote}"]`)
+          .classList.add("pressed");
+      });
 
-      keyElement.className = `key ${keyClassname} ${keyColor}`;
-      Object.assign(keyElement.dataset, { midiNote });
+      this.controller.on("stopmidinote", (midiNote) => {
+        keys
+          .querySelector(`[data-midi-note="${midiNote}"]`)
+          .classList.remove("pressed");
+      });
 
-      labelElement.className = "label";
-      labelElement.innerHTML = `${name}<sub>${octave}</sub>`;
-      keyElement.appendChild(labelElement);
+      ManualKeys.forEach(({ midiNote, octave, name }) => {
+        const keyClassName = name.toLowerCase().replaceAll("#", "s");
+        const keyColor = name.length > 1 ? "black" : "white";
 
-      keyElement.addEventListener("mousedown", (e) => this.onKeyDown(e), false);
-      keyElement.addEventListener(
-        "mouseenter",
-        (e) => this.onKeyDown(e),
-        false
-      );
-      keyElement.addEventListener("mouseup", (e) => this.onKeyUp(e), false);
-      keyElement.addEventListener("mouseleave", (e) => this.onKeyUp(e), false);
+        div(
+          { className: `key ${keyClassName} ${keyColor}`, parent: keys },
+          (keyElement) => {
+            Object.assign(keyElement.dataset, { midiNote });
 
-      keys.appendChild(keyElement);
-    });
+            keyElement.onmousedown = (e) => this.onKeyDown(e);
+            keyElement.onmouseenter = (e) => this.onKeyDown(e);
+            keyElement.onmouseup = (e) => this.onKeyUp(e);
+            keyElement.onmouseleave = (e) => this.onKeyUp(e);
 
-    this.controller.on("playmidinote", (midiNote) => {
-      keys
-        .querySelector(`[data-midi-note="${midiNote}"]`)
-        .classList.add("pressed");
-    });
-
-    this.controller.on("stopmidinote", (midiNote) => {
-      keys
-        .querySelector(`[data-midi-note="${midiNote}"]`)
-        .classList.remove("pressed");
+            div({ className: "label", parent: keyElement }, (labelElement) => {
+              labelElement.innerHTML = `${name}<sub>${octave}</sub>`;
+            });
+          }
+        );
+      });
     });
   }
 

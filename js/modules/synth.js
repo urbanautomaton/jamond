@@ -1,4 +1,4 @@
-import toneWheels from "./toneWheels.js";
+import toneWheels from "./tone_wheels.js";
 
 const hasKeyForNote = (midiNote) => midiNote >= 36 && midiNote <= 96;
 

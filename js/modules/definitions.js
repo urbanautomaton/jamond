@@ -96,4 +96,6 @@ const ToneWheels = [
 
 const ManualKeys = ToneWheels.slice(12, 73);
 
-export { ToneWheels, ManualKeys };
+const isManualKey = (midiNote) => midiNote >= 36 && midiNote <= 96;
+
+export { ToneWheels, ManualKeys, isManualKey };

@@ -1,4 +1,4 @@
-import { ManualKeys } from "./modules/definitions.js";
+import { ManualKeys, isManualKey } from "./modules/definitions.js";
 import Synth from "./modules/synth.js";
 import Drawbar from "./modules/drawbar.js";
 import MidiHammondInput from "./modules/midi_hammond_input.js";
@@ -11,15 +11,21 @@ const keys = keyboard.querySelector(".keys");
 const synth = new Synth();
 
 const playMidiNote = (midiNote) => {
-  keys.querySelector(`[data-midi-note="${midiNote}"]`).classList.add("pressed");
-  synth.playMidiNote(midiNote);
+  if (isManualKey(midiNote)) {
+    keys
+      .querySelector(`[data-midi-note="${midiNote}"]`)
+      .classList.add("pressed");
+    synth.playMidiNote(midiNote);
+  }
 };
 
 const stopMidiNote = (midiNote) => {
-  keys
-    .querySelector(`[data-midi-note="${midiNote}"]`)
-    .classList.remove("pressed");
-  synth.stopMidiNote(midiNote);
+  if (isManualKey(midiNote)) {
+    keys
+      .querySelector(`[data-midi-note="${midiNote}"]`)
+      .classList.remove("pressed");
+    synth.stopMidiNote(midiNote);
+  }
 };
 
 const onKeyDown = (e) => {

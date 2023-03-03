@@ -1,6 +1,4 @@
-import { ToneWheels, ManualKeys } from "./definitions.js";
-
-const hasKeyForNote = (midiNote) => midiNote >= 36 && midiNote <= 96;
+import { ToneWheels, ManualKeys, isManualKey } from "./definitions.js";
 
 class Synth {
   constructor() {
@@ -68,7 +66,7 @@ class Synth {
   playMidiNote(midiNote) {
     this.init();
 
-    if (hasKeyForNote(midiNote)) {
+    if (isManualKey(midiNote)) {
       this.notesPlaying.add(midiNote);
       this.updateGains();
     }

@@ -4,18 +4,26 @@ import Drawbar from "./modules/drawbar.js";
 import MidiHammondInput from "./modules/midi_hammond_input.js";
 import KeyboardHammondInput from "./modules/keyboard_hammond_input.js";
 
+const handlers = {};
 const keyboard = document.getElementById("keyboard");
 const drawbars = keyboard.querySelector(".drawbars");
 const keys = keyboard.querySelector(".keys");
 
-const synth = new Synth();
+const on = (event, cb) => {
+  handlers[event] ||= [];
+  handlers[event].push(cb);
+};
+
+const trigger = (event, ...args) => {
+  (handlers[event] || []).forEach((cb) => cb(...args));
+};
 
 const playMidiNote = (midiNote) => {
   if (isManualKey(midiNote)) {
     keys
       .querySelector(`[data-midi-note="${midiNote}"]`)
       .classList.add("pressed");
-    synth.playMidiNote(midiNote);
+    trigger("playmidinote", midiNote);
   }
 };
 
@@ -24,9 +32,11 @@ const stopMidiNote = (midiNote) => {
     keys
       .querySelector(`[data-midi-note="${midiNote}"]`)
       .classList.remove("pressed");
-    synth.stopMidiNote(midiNote);
+    trigger("stopmidinote", midiNote);
   }
 };
+
+const synth = new Synth({ on });
 
 const onKeyDown = (e) => {
   if (!(e.buttons & 1)) {

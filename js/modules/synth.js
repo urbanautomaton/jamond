@@ -6,12 +6,14 @@ import {
 } from "./definitions.js";
 
 class Synth {
-  constructor() {
+  constructor(controller) {
     this.initialized = false;
     this.audioContext = null;
     this.mainGainNode = null;
     this.notesPlaying = new Set();
     this.drawbarValues = new Array(Drawbars.length).fill(8);
+    controller.on("playmidinote", (midiNote) => this.playMidiNote(midiNote));
+    controller.on("stopmidinote", (midiNote) => this.stopMidiNote(midiNote));
   }
 
   normalizeMainGain() {

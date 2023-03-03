@@ -2,7 +2,7 @@ import toneWheels from "./toneWheels.js";
 
 const hasKeyForNote = (midiNote) => midiNote >= 36 && midiNote <= 96;
 
-class Hammond {
+class Synth {
   constructor() {
     this.initialized = false;
     this.audioContext = null;
@@ -97,4 +97,4 @@ class Hammond {
   }
 }
 
-export default Hammond;
+export default Synth;

@@ -1,4 +1,4 @@
-import Hammond from "./modules/hammond.js";
+import Synth from "./modules/synth.js";
 import Drawbar from "./modules/drawbar.js";
 import MidiHammondInput from "./modules/midi_hammond_input.js";
 
@@ -6,18 +6,18 @@ const keyboard = document.getElementById("keyboard");
 const drawbars = keyboard.querySelector(".drawbars");
 const keys = keyboard.querySelector(".keys");
 
-const hammond = new Hammond();
+const synth = new Synth();
 
 const playMidiNote = (midiNote) => {
   keys.querySelector(`[data-midi-note="${midiNote}"]`).classList.add("pressed");
-  hammond.playMidiNote(midiNote);
+  synth.playMidiNote(midiNote);
 };
 
 const stopMidiNote = (midiNote) => {
   keys
     .querySelector(`[data-midi-note="${midiNote}"]`)
     .classList.remove("pressed");
-  hammond.stopMidiNote(midiNote);
+  synth.stopMidiNote(midiNote);
 };
 
 const onKeyDown = (e) => {
@@ -36,14 +36,14 @@ const onKeyUp = (e) => {
   e.preventDefault();
 };
 
-hammond.eachDrawbar(({ label, value, color }, setValue) => {
+synth.eachDrawbar(({ label, value, color }, setValue) => {
   const drawbarContainer = document.createElement("div");
   drawbarContainer.className = `drawbar ${color}`;
   new Drawbar(drawbarContainer, label, setValue);
   drawbars.appendChild(drawbarContainer);
 });
 
-hammond.eachManualKey(({ midiNote, octave, name }) => {
+synth.eachManualKey(({ midiNote, octave, name }) => {
   const keyElement = document.createElement("div");
   const labelElement = document.createElement("div");
   const keyClassname = name.toLowerCase().replaceAll("#", "s");

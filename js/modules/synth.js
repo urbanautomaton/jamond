@@ -52,7 +52,8 @@ class Synth {
       const toneIndex = midiNote - ToneWheels[0].midiNote;
 
       this.drawbars.forEach(({ offset, value }) => {
-        gains[toneIndex + offset] = value / 8.0;
+        gains[toneIndex + offset] ||= 0.0;
+        gains[toneIndex + offset] += value / 8.0;
       });
     });
 

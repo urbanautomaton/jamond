@@ -96,6 +96,18 @@ const ToneWheels = [
 
 const ManualKeys = ToneWheels.slice(12, 73);
 
+const Drawbars = [
+  { label: "16'", offset: -12, color: "brown" },
+  { label: "5⅓'", offset: 7, color: "brown" },
+  { label: "8'", offset: 0, color: "white" },
+  { label: "4'", offset: 12, color: "white" },
+  { label: "2⅔'", offset: 19, color: "black" },
+  { label: "2'", offset: 24, color: "white" },
+  { label: "1⅗'", offset: 28, color: "black" },
+  { label: "1⅓'", offset: 31, color: "black" },
+  { label: "1'", offset: 36, color: "white" },
+];
+
 const isManualKey = (midiNote) => midiNote >= 36 && midiNote <= 96;
 
-export { ToneWheels, ManualKeys, isManualKey };
+export { ToneWheels, ManualKeys, Drawbars, isManualKey };

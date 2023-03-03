@@ -1,4 +1,9 @@
-import { ToneWheels, ManualKeys, isManualKey } from "./definitions.js";
+import {
+  ToneWheels,
+  ManualKeys,
+  Drawbars,
+  isManualKey,
+} from "./definitions.js";
 
 class Synth {
   constructor() {
@@ -6,22 +11,12 @@ class Synth {
     this.audioContext = null;
     this.mainGainNode = null;
     this.notesPlaying = new Set();
-    this.drawbars = [
-      { label: "16'", offset: -12, value: 8, color: "brown" },
-      { label: "5⅓'", offset: 7, value: 8, color: "brown" },
-      { label: "8'", offset: 0, value: 8, color: "white" },
-      { label: "4'", offset: 12, value: 8, color: "white" },
-      { label: "2⅔'", offset: 19, value: 8, color: "black" },
-      { label: "2'", offset: 24, value: 8, color: "white" },
-      { label: "1⅗'", offset: 28, value: 8, color: "black" },
-      { label: "1⅓'", offset: 31, value: 8, color: "black" },
-      { label: "1'", offset: 36, value: 8, color: "white" },
-    ];
+    this.drawbarValues = new Array(Drawbars.length).fill(8);
   }
 
   normalizeMainGain() {
     if (this.mainGainNode !== null) {
-      const drawbarSum = this.drawbars.reduce((acc, bar) => acc + bar.value, 0);
+      const drawbarSum = this.drawbarValues.reduce((acc, bar) => acc + bar, 0);
 
       this.mainGainNode.gain.value = 0.5 / drawbarSum;
     }
@@ -59,7 +54,8 @@ class Synth {
     this.notesPlaying.forEach((midiNote) => {
       const toneIndex = midiNote - ToneWheels[0].midiNote;
 
-      this.drawbars.forEach(({ offset, value }) => {
+      this.drawbarValues.forEach((value, index) => {
+        const offset = Drawbars[index].offset;
         gains[toneIndex + offset] ||= 0.0;
         gains[toneIndex + offset] += value / 8.0;
       });
@@ -89,14 +85,8 @@ class Synth {
   }
 
   setDrawbar(index, value) {
-    this.drawbars[index].value = value;
+    this.drawbarValues[index] = value;
     this.normalizeMainGain();
-  }
-
-  eachDrawbar(cb) {
-    this.drawbars.forEach((bar, index) => {
-      cb(bar, (value) => this.setDrawbar(index, value));
-    });
   }
 }
 

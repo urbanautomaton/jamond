@@ -1,4 +1,4 @@
-import { ManualKeys, isManualKey } from "./modules/definitions.js";
+import { ManualKeys, Drawbars, isManualKey } from "./modules/definitions.js";
 import Synth from "./modules/synth.js";
 import Drawbar from "./modules/drawbar.js";
 import MidiHammondInput from "./modules/midi_hammond_input.js";
@@ -44,10 +44,14 @@ const onKeyUp = (e) => {
   e.preventDefault();
 };
 
-synth.eachDrawbar(({ label, value, color }, setValue) => {
+const setDrawbar = (index, value) => {
+  synth.setDrawbar(index, value);
+};
+
+Drawbars.forEach(({ label, color }, index) => {
   const drawbarContainer = document.createElement("div");
   drawbarContainer.className = `drawbar ${color}`;
-  new Drawbar(drawbarContainer, label, setValue);
+  new Drawbar(drawbarContainer, label, (value) => setDrawbar(index, value));
   drawbars.appendChild(drawbarContainer);
 });
 

@@ -18,6 +18,7 @@ class KeyboardHammondInput {
   constructor({ playMidiNote, stopMidiNote }) {
     this.playMidiNote = playMidiNote;
     this.stopMidiNote = stopMidiNote;
+
     document.addEventListener(
       "keydown",
       (e) => {

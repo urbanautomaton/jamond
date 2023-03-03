@@ -1,4 +1,4 @@
-const toneWheels = [
+const ToneWheels = [
   { midiNote: 24, octave: 1, name: "C", frequency: 32.692 },
   { midiNote: 25, octave: 1, name: "C#", frequency: 34.634 },
   { midiNote: 26, octave: 1, name: "D", frequency: 36.712 },
@@ -94,4 +94,6 @@ const toneWheels = [
   { midiNote: 114, octave: 8, name: "F#", frequency: 5924.571 },
 ];
 
-export default toneWheels;
+const ManualKeys = ToneWheels.slice(12, 73);
+
+export { ToneWheels, ManualKeys };

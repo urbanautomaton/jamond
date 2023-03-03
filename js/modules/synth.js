@@ -1,6 +1,4 @@
-import toneWheels from "./tone_wheels.js";
-
-export const ManualKeys = toneWheels.slice(12, 72);
+import { ToneWheels, ManualKeys } from "./definitions.js";
 
 const hasKeyForNote = (midiNote) => midiNote >= 36 && midiNote <= 96;
 
@@ -30,8 +28,7 @@ class Synth {
       this.mainGainNode = this.audioContext.createGain();
       this.mainGainNode.connect(this.audioContext.destination);
       this.mainGainNode.gain.value = 0.05;
-
-      toneWheels.forEach((toneWheel) => {
+      this.toneWheels = ToneWheels.map(({ frequency }) => {
         const gainNode = this.audioContext.createGain();
         gainNode.connect(this.mainGainNode);
         gainNode.gain.value = 0;
@@ -39,11 +36,13 @@ class Synth {
         const osc = this.audioContext.createOscillator();
         osc.connect(gainNode);
         osc.type = "sine";
-        osc.frequency.value = toneWheel.frequency;
+        osc.frequency.value = frequency;
         osc.start();
 
-        toneWheel.osc = osc;
-        toneWheel.gainNode = gainNode;
+        return {
+          osc,
+          gainNode,
+        };
       });
     }
   }
@@ -52,14 +51,14 @@ class Synth {
     const gains = {};
 
     this.notesPlaying.forEach((midiNote) => {
-      const toneIndex = midiNote - toneWheels[0].midiNote;
+      const toneIndex = midiNote - ToneWheels[0].midiNote;
 
       this.drawbars.forEach(({ offset, value }) => {
         gains[toneIndex + offset] = value / 8.0;
       });
     });
 
-    toneWheels.forEach(({ gainNode }, index) => {
+    this.toneWheels.forEach(({ gainNode }, index) => {
       const gain = gains[index] || 0.0;
 
       gainNode.gain.setTargetAtTime(gain, this.audioContext.currentTime, 0.01);

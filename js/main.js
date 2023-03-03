@@ -1,4 +1,5 @@
-import Synth, { ManualKeys } from "./modules/synth.js";
+import { ManualKeys } from "./modules/definitions.js";
+import Synth from "./modules/synth.js";
 import Drawbar from "./modules/drawbar.js";
 import MidiHammondInput from "./modules/midi_hammond_input.js";
 import KeyboardHammondInput from "./modules/keyboard_hammond_input.js";

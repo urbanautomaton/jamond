@@ -14,6 +14,9 @@ class Synth {
     this.drawbarValues = new Array(Drawbars.length).fill(8);
     controller.on("playmidinote", (midiNote) => this.playMidiNote(midiNote));
     controller.on("stopmidinote", (midiNote) => this.stopMidiNote(midiNote));
+    controller.on("setdrawbar", (index, value) =>
+      this.setDrawbar(index, value)
+    );
   }
 
   normalizeMainGain() {

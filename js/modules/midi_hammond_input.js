@@ -4,9 +4,8 @@ const MidiCommands = {
 };
 
 class MidiHammondInput {
-  constructor({ playMidiNote, stopMidiNote }) {
-    this.playMidiNote = playMidiNote;
-    this.stopMidiNote = stopMidiNote;
+  constructor(controller) {
+    this.controller = controller;
     this.midiAccess = null;
 
     if (navigator.requestMidiAccess === null) {
@@ -41,13 +40,13 @@ class MidiHammondInput {
     switch (command) {
       case MidiCommands.NOTE_ON:
         if (velocity > 0) {
-          this.playMidiNote(note);
+          this.controller.playMidiNote(note);
         } else {
-          this.stopMidiNote(note);
+          this.controller.stopMidiNote(note);
         }
         break;
       case MidiCommands.NOTE_OFF:
-        this.stopMidiNote(note);
+        this.controller.stopMidiNote(note);
         break;
     }
   }

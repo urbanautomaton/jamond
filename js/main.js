@@ -4,40 +4,40 @@ import MidiHammondInput from "./modules/midi_hammond_input.js";
 import KeyboardHammondInput from "./modules/keyboard_hammond_input.js";
 import HammondUI from "./modules/hammond_ui.js";
 
-const handlers = {};
-
-const on = (event, cb) => {
-  handlers[event] ||= [];
-  handlers[event].push(cb);
-};
-
-const trigger = (event, ...args) => {
-  (handlers[event] || []).forEach((cb) => cb(...args));
-};
-
-const playMidiNote = (midiNote) => {
-  if (isManualKey(midiNote)) {
-    trigger("playmidinote", midiNote);
+class Controller {
+  constructor() {
+    this.handlers = {};
   }
-};
 
-const stopMidiNote = (midiNote) => {
-  if (isManualKey(midiNote)) {
-    trigger("stopmidinote", midiNote);
+  on(event, cb) {
+    this.handlers[event] ||= [];
+    this.handlers[event].push(cb);
   }
-};
 
-const synth = new Synth({ on });
+  trigger(event, ...args) {
+    (this.handlers[event] || []).forEach((cb) => cb(...args));
+  }
 
-const setDrawbar = (index, value) => {
-  synth.setDrawbar(index, value);
-};
+  playMidiNote(midiNote) {
+    if (isManualKey(midiNote)) {
+      this.trigger("playmidinote", midiNote);
+    }
+  }
 
-new HammondUI(document.getElementById("keyboard"), {
-  playMidiNote,
-  stopMidiNote,
-  setDrawbar,
-  on,
-});
-new KeyboardHammondInput({ playMidiNote, stopMidiNote });
-new MidiHammondInput({ playMidiNote, stopMidiNote });
+  stopMidiNote(midiNote) {
+    if (isManualKey(midiNote)) {
+      this.trigger("stopmidinote", midiNote);
+    }
+  }
+
+  setDrawbar(index, value) {
+    this.trigger("setdrawbar", index, value);
+  }
+}
+
+const controller = new Controller();
+
+new Synth(controller);
+new HammondUI(document.getElementById("keyboard"), controller);
+new KeyboardHammondInput(controller);
+new MidiHammondInput(controller);

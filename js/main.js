@@ -7,10 +7,14 @@ import HammondUI from "./modules/hammond_ui.js";
 
 const controller = new Controller();
 
-new Synth(controller);
-new HammondUI(document.getElementById("keyboard"), controller);
-new KeyboardHammondInput(controller);
-new MidiHammondInput(controller);
+const components = [
+  new Synth();
+  new HammondUI(document.getElementById("keyboard"));
+  new KeyboardHammondInput();
+  new MidiHammondInput();
+]
+
+components.forEach((component) => component.connect(controller));
 
 Drawbars.forEach((bar, index) => {
   controller.setDrawbar(index, 8);

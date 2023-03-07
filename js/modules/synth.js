@@ -4,6 +4,7 @@ import {
   Drawbars,
   isManualKey,
 } from "./definitions.js";
+import PercussionLatch from "./percussion_latch.js";
 
 class Synth {
   constructor(controller) {
@@ -12,6 +13,8 @@ class Synth {
     this.mainGainNode = null;
     this.notesPlaying = new Set();
     this.drawbarValues = new Array(Drawbars.length).fill(8);
+    this.percussionLatch = new PercussionLatch();
+
     controller.on("playmidinote", (midiNote) => this.playMidiNote(midiNote));
     controller.on("stopmidinote", (midiNote) => this.stopMidiNote(midiNote));
     controller.on("setdrawbar", (index, value) => {
@@ -38,9 +41,13 @@ class Synth {
         const gainNode = this.audioContext.createGain();
         gainNode.connect(this.mainGainNode);
         gainNode.gain.value = 0;
+        const percussionGainNode = this.audioContext.createGain();
+        percussionGainNode.connect(this.mainGainNode);
+        percussionGainNode.gain.value = 0;
 
         const osc = this.audioContext.createOscillator();
         osc.connect(gainNode);
+        osc.connect(percussionGainNode);
         osc.type = "sine";
         osc.frequency.value = frequency;
         osc.start();
@@ -48,6 +55,7 @@ class Synth {
         return {
           osc,
           gainNode,
+          percussionGainNode,
         };
       });
     }
@@ -73,10 +81,40 @@ class Synth {
     });
   }
 
+  percussionGainNode(midiNote) {
+    const toneIndex = midiNote - ToneWheels[0].midiNote + 12;
+    const { percussionGainNode } = this.toneWheels[toneIndex];
+
+    return percussionGainNode;
+  }
+
+  startPercussion(midiNote) {
+    this.percussionLatch.try(() => {
+      const gainNode = this.percussionGainNode(midiNote);
+      const now = this.audioContext.currentTime;
+
+      gainNode.gain.cancelScheduledValues(now);
+
+      // experimenting with setting directly both here and on stop, because it
+      // seems like the setValueAtTime calls fight otherwise, to weird effect
+      gainNode.gain.linearRampToValueAtTime(1.5, now + 0.01);
+      gainNode.gain.linearRampToValueAtTime(0.0, now + 0.4);
+    });
+  }
+
+  stopPercussion(midiNote) {
+    const gainNode = this.percussionGainNode(midiNote);
+    const now = this.audioContext.currentTime;
+
+    gainNode.gain.cancelScheduledValues(now);
+    gainNode.gain.linearRampToValueAtTime(0.0, now + 0.01);
+  }
+
   playMidiNote(midiNote) {
     this.init();
 
     if (isManualKey(midiNote)) {
+      this.startPercussion(midiNote);
       this.notesPlaying.add(midiNote);
       this.updateGains();
     }
@@ -85,6 +123,10 @@ class Synth {
   stopMidiNote(midiNote) {
     if (this.initialized) {
       this.notesPlaying.delete(midiNote);
+      if (this.notesPlaying.size === 0) {
+        this.percussionLatch.release();
+      }
+      this.stopPercussion(midiNote);
       this.updateGains();
     }
   }

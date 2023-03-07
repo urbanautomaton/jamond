@@ -13,5 +13,5 @@ new KeyboardHammondInput(controller);
 new MidiHammondInput(controller);
 
 Drawbars.forEach((bar, index) => {
-  controller.setDrawbar(index, 8);
+  controller.setDrawbar(index, index < 4 ? 8 : 0);
 });

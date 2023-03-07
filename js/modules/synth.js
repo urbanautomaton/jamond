@@ -110,10 +110,14 @@ class Synth {
     gainNode.gain.linearRampToValueAtTime(0.0, now + 0.01);
   }
 
+  isPlaying(midiNote) {
+    return this.notesPlaying.has(midiNote);
+  }
+
   playMidiNote(midiNote) {
     this.init();
 
-    if (isManualKey(midiNote)) {
+    if (isManualKey(midiNote) && !this.isPlaying(midiNote)) {
       this.startPercussion(midiNote);
       this.notesPlaying.add(midiNote);
       this.updateGains();

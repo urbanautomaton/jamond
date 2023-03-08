@@ -5,6 +5,7 @@ import {
   isManualKey,
 } from "./definitions.js";
 import PercussionLatch from "./percussion_latch.js";
+import VibratoNode from "./vibrato_node.js";
 
 class Synth {
   constructor(controller) {
@@ -27,8 +28,12 @@ class Synth {
       this.audioContext = new AudioContext();
       this.initialized = true;
       this.mainGainNode = this.audioContext.createGain();
-      this.mainGainNode.connect(this.audioContext.destination);
       this.mainGainNode.gain.value = 0.05;
+
+      this.vibratoNode = new VibratoNode(this.audioContext);
+      this.mainGainNode.connect(this.vibratoNode);
+      this.vibratoNode.connect(this.audioContext.destination);
+
       this.toneWheels = ToneWheels.map(({ frequency }) => {
         const gainNode = this.audioContext.createGain();
         gainNode.connect(this.mainGainNode);

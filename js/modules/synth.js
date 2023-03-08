@@ -24,8 +24,8 @@ class Synth {
 
   init() {
     if (!this.initialized) {
-      this.initialized = true;
       this.audioContext = new AudioContext();
+      this.initialized = true;
       this.mainGainNode = this.audioContext.createGain();
       this.mainGainNode.connect(this.audioContext.destination);
       this.mainGainNode.gain.value = 0.05;

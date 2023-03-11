@@ -5,7 +5,10 @@ class VibratoNode extends GainNode {
   constructor(audioContext) {
     super(audioContext, { gain: 1 });
 
-    this.delayNode = new DelayNode(audioContext, {
+    this.chorusGain = new GainNode(audioContext, { gain: 0.5 });
+    this.connect(this.chorusGain);
+
+    const delayNode = new DelayNode(audioContext, {
       delayTime: MAX_DELAY_SEC / 2,
       maxDelayTime: MAX_DELAY_SEC,
     });
@@ -13,7 +16,7 @@ class VibratoNode extends GainNode {
     const vibratoAmplitude = new GainNode(audioContext, {
       gain: MAX_DELAY_SEC / 2,
     });
-    vibratoAmplitude.connect(this.delayNode.delayTime);
+    vibratoAmplitude.connect(delayNode.delayTime);
 
     const vibratoLFO = new OscillatorNode(audioContext, {
       frequency: VIBRATO_PACE_HZ,
@@ -21,10 +24,15 @@ class VibratoNode extends GainNode {
     vibratoLFO.connect(vibratoAmplitude);
     vibratoLFO.start();
 
-    this.connect(this.delayNode);
+    this.connect(delayNode);
+    this.vibratoGain = new GainNode(audioContext, { gain: 0.5 });
+    delayNode.connect(this.vibratoGain);
 
     this.connect = (destination) => {
-      return this.delayNode.connect(destination);
+      this.chorusGain.connect(destination);
+      this.vibratoGain.connect(destination);
+
+      return destination;
     };
   }
 }

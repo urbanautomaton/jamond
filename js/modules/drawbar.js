@@ -30,9 +30,11 @@ class Drawbar {
     container.addEventListener("mousemove", (e) => this.move(e));
     container.addEventListener("mouseleave", (e) => this.stopDrag(e));
     container.addEventListener("mouseup", (e) => this.stopDrag(e));
+    container.addEventListener("wheel", (e) => this.wheel(e));
 
     this.container = container;
     this.dragging = false;
+    this.wheeling = false;
     this.index = index;
     this.controller = controller;
 
@@ -60,11 +62,30 @@ class Drawbar {
     }
   }
 
+  wheel(e) {
+    if (!this.wheeling) {
+      this.wheeling = true;
+      this.wheeled = 0;
+      this.startValue = this.value;
+    }
+
+    this.wheeled -= e.deltaX;
+
+    const newValue = clampValue(
+      this.startValue - Math.floor(this.wheeled / this.segmentHeight)
+    );
+
+    if (newValue !== this.value) {
+      this.setValue(newValue);
+    }
+  }
+
   startDrag(e) {
     if (!(e.buttons & 1)) {
       return true;
     }
 
+    this.wheeling = false;
     this.dragging = true;
     this.startY = e.pageY;
     this.startValue = this.value;
@@ -72,6 +93,7 @@ class Drawbar {
   }
 
   stopDrag(e) {
+    this.wheeling = false;
     this.dragging = false;
     this.startY = null;
     this.startValue = null;

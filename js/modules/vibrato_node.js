@@ -1,4 +1,4 @@
-const MAX_DELAY_SEC = 0.0005;
+const MAX_DELAY_SEC = 0.001;
 const VIBRATO_PACE_HZ = 412 / 60;
 
 class VibratoNode extends GainNode {

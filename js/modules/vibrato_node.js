@@ -1,23 +1,31 @@
 const MAX_DELAY_SEC = 0.0005;
 const VIBRATO_PACE_HZ = 412 / 60;
 
-class VibratoNode extends DelayNode {
+class VibratoNode extends GainNode {
   constructor(audioContext) {
-    super(audioContext, {
+    super(audioContext, { gain: 1 });
+
+    this.delayNode = new DelayNode(audioContext, {
       delayTime: MAX_DELAY_SEC / 2,
       maxDelayTime: MAX_DELAY_SEC,
     });
 
-    this.vibratoAmplitude = new GainNode(audioContext, {
+    const vibratoAmplitude = new GainNode(audioContext, {
       gain: MAX_DELAY_SEC / 2,
     });
-    this.vibratoAmplitude.connect(this.delayTime);
+    vibratoAmplitude.connect(this.delayNode.delayTime);
 
-    this.vibratoLFO = new OscillatorNode(audioContext, {
+    const vibratoLFO = new OscillatorNode(audioContext, {
       frequency: VIBRATO_PACE_HZ,
     });
-    this.vibratoLFO.connect(this.vibratoAmplitude);
-    this.vibratoLFO.start();
+    vibratoLFO.connect(vibratoAmplitude);
+    vibratoLFO.start();
+
+    this.connect(this.delayNode);
+
+    this.connect = (destination) => {
+      return this.delayNode.connect(destination);
+    };
   }
 }
 

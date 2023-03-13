@@ -26,6 +26,14 @@ class Controller {
     }
   }
 
+  enableVibrato(value) {
+    this.trigger("enablevibrato", value);
+  }
+
+  setVibratoMode(mode) {
+    this.trigger("setvibratomode", mode);
+  }
+
   setDrawbar(index, value) {
     this.trigger("setdrawbar", index, value);
   }

@@ -1,4 +1,4 @@
-import { ManualKeys, Drawbars } from "./definitions.js";
+import { ManualKeys, Drawbars, VibratoModes } from "./definitions.js";
 import Drawbar from "./drawbar.js";
 
 const createElement = (elementType, parent, attributes, cb = () => {}) => {
@@ -9,14 +9,50 @@ const createElement = (elementType, parent, attributes, cb = () => {}) => {
   return element;
 };
 
-HTMLElement.prototype.div = function (attributes, cb = () => {}) {
-  return createElement("div", this, attributes, cb);
-};
+["div", "input", "label", "option", "select"].forEach((elementType) => {
+  HTMLElement.prototype[elementType] = function (attributes, cb = () => {}) {
+    return createElement(elementType, this, attributes, cb);
+  };
+});
 
 class HammondUI {
   constructor(container, controller) {
     this.container = container;
     this.controller = controller;
+
+    this.container.div({ className: "vibratoControls" }, (vibratoControls) => {
+      vibratoControls.input(
+        { name: "vibratoEnabled", type: "checkbox", checked: true },
+        (vibratoEnabled) => {
+          vibratoEnabled.onchange = (event) => {
+            this.controller.enableVibrato(event.target.checked);
+          };
+        }
+      );
+
+      vibratoControls.label({
+        for: "vibratoEnabled",
+        innerText: "Vibrato enabled?",
+      });
+
+      vibratoControls.select(
+        { name: "vibratoMode", required: true },
+        (vibratoMode) => {
+          VibratoModes.forEach((mode) => {
+            vibratoMode.option({ value: mode, innerText: mode });
+          });
+          vibratoMode.onchange = (event) => {
+            this.controller.setVibratoMode(event.target.value);
+          };
+          vibratoMode.value = "C-3";
+        }
+      );
+
+      vibratoControls.label({
+        for: "vibratoMode",
+        innerText: "Vibrato Mode",
+      });
+    });
 
     this.container.div({ className: "drawbars" }, (drawbars) => {
       Drawbars.forEach(({ label, color }, index) => {

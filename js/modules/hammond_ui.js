@@ -1,12 +1,16 @@
 import { ManualKeys, Drawbars } from "./definitions.js";
 import Drawbar from "./drawbar.js";
 
-const div = ({ className, parent }, cb = () => {}) => {
-  const element = document.createElement("div");
-  element.className = className;
+const createElement = (elementType, parent, attributes, cb = () => {}) => {
+  const element = document.createElement(elementType);
+  Object.assign(element, attributes);
   parent.appendChild(element);
   cb(element);
   return element;
+};
+
+HTMLElement.prototype.div = function (attributes, cb = () => {}) {
+  return createElement("div", this, attributes, cb);
 };
 
 class HammondUI {
@@ -14,15 +18,15 @@ class HammondUI {
     this.container = container;
     this.controller = controller;
 
-    div({ className: "drawbars", parent: container }, (drawbars) => {
+    this.container.div({ className: "drawbars" }, (drawbars) => {
       Drawbars.forEach(({ label, color }, index) => {
-        div({ className: `drawbar ${color}`, parent: drawbars }, (drawbar) => {
+        drawbars.div({ className: `drawbar ${color}` }, (drawbar) => {
           new Drawbar(drawbar, label, index, controller);
         });
       });
     });
 
-    div({ className: "keys", parent: container }, (keys) => {
+    this.container.div({ className: "keys" }, (keys) => {
       this.controller.on("playmidinote", (midiNote) => {
         keys
           .querySelector(`[data-midi-note="${midiNote}"]`)
@@ -39,8 +43,8 @@ class HammondUI {
         const keyClassName = name.toLowerCase().replaceAll("#", "s");
         const keyColor = name.length > 1 ? "black" : "white";
 
-        div(
-          { className: `key ${keyClassName} ${keyColor}`, parent: keys },
+        keys.div(
+          { className: `key ${keyClassName} ${keyColor}` },
           (keyElement) => {
             Object.assign(keyElement.dataset, { midiNote });
 
@@ -49,7 +53,7 @@ class HammondUI {
             keyElement.onmouseup = (e) => this.onKeyUp(e);
             keyElement.onmouseleave = (e) => this.onKeyUp(e);
 
-            div({ className: "label", parent: keyElement }, (labelElement) => {
+            keyElement.div({ className: "label" }, (labelElement) => {
               labelElement.innerHTML = `${name}<sub>${octave}</sub>`;
             });
           }

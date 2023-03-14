@@ -21,6 +21,12 @@ class Synth {
     controller.on("setdrawbar", (index, value) => {
       this.setDrawbar(index, value);
     });
+    controller.on("enablevibrato", (value) => {
+      this.enableVibrato(value);
+    });
+    controller.on("setvibratomode", (mode) => {
+      this.setVibratoMode(mode);
+    });
   }
 
   init() {
@@ -133,7 +139,27 @@ class Synth {
   }
 
   setDrawbar(index, value) {
+    this.init();
+
     this.drawbarValues[index] = value;
+  }
+
+  enableVibrato(value) {
+    this.init();
+
+    if (value) {
+      this.mainGainNode.disconnect();
+      this.mainGainNode.connect(this.vibratoNode);
+    } else {
+      this.mainGainNode.disconnect();
+      this.mainGainNode.connect(this.audioContext.destination);
+    }
+  }
+
+  setVibratoMode(mode) {
+    this.init();
+
+    this.vibratoNode.setMode(mode);
   }
 }
 

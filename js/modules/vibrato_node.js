@@ -1,3 +1,5 @@
+import { VibratoModes } from "./definitions.js";
+
 const MAX_DELAY_SEC = 0.001;
 const VIBRATO_PACE_HZ = 412 / 60;
 
@@ -13,15 +15,15 @@ class VibratoNode extends GainNode {
       maxDelayTime: MAX_DELAY_SEC,
     });
 
-    const vibratoAmplitude = new GainNode(audioContext, {
+    this.vibratoAmplitude = new GainNode(audioContext, {
       gain: MAX_DELAY_SEC / 2,
     });
-    vibratoAmplitude.connect(delayNode.delayTime);
+    this.vibratoAmplitude.connect(delayNode.delayTime);
 
     const vibratoLFO = new OscillatorNode(audioContext, {
       frequency: VIBRATO_PACE_HZ,
     });
-    vibratoLFO.connect(vibratoAmplitude);
+    vibratoLFO.connect(this.vibratoAmplitude);
     vibratoLFO.start();
 
     this.connect(delayNode);
@@ -34,6 +36,28 @@ class VibratoNode extends GainNode {
 
       return destination;
     };
+  }
+
+  setMode(mode) {
+    if (!VibratoModes.includes(mode)) {
+      throw new Error(`Invalid vibrato mode: ${mode}`);
+    }
+
+    let modeType, level;
+    [modeType, level] = mode.split("-");
+
+    if (modeType === "V") {
+      // Vibrato only
+      this.chorusGain.gain.value = 0;
+      this.vibratoGain.gain.value = 1;
+    } else {
+      // Vibrato + chorus
+      this.chorusGain.gain.value = 0.5;
+      this.vibratoGain.gain.value = 0.5;
+    }
+
+    this.vibratoAmplitude.gain.value =
+      (parseInt(level) / 3) * (MAX_DELAY_SEC / 2);
   }
 }
 

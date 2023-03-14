@@ -108,6 +108,8 @@ const Drawbars = [
   { label: "1'", offset: 36, color: "white" },
 ];
 
+const VibratoModes = ["V-1", "V-2", "V-3", "C-1", "C-2", "C-3"];
+
 const isManualKey = (midiNote) => midiNote >= 36 && midiNote <= 96;
 
-export { ToneWheels, ManualKeys, Drawbars, isManualKey };
+export { ToneWheels, ManualKeys, Drawbars, VibratoModes, isManualKey };

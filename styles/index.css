@@ -95,3 +95,11 @@ body {
 .key.black .label {
   display: none;
 }
+
+.vibratoControls {
+  color: white;
+}
+
+.vibratoControls > * {
+  margin: 0.5em;
+}

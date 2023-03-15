@@ -8,10 +8,11 @@ import PercussionLatch from "./percussion_latch.js";
 import VibratoNode from "./vibrato_node.js";
 
 class Synth {
-  constructor(controller) {
-    this.initialized = false;
-    this.audioContext = null;
-    this.mainGainNode = null;
+  constructor(controller, audioContext) {
+    this.audioContext = audioContext;
+
+    this.#init();
+
     this.notesPlaying = new Set();
     this.drawbarValues = new Array(Drawbars.length).fill(8);
     this.percussionLatch = new PercussionLatch();
@@ -29,39 +30,35 @@ class Synth {
     });
   }
 
-  init() {
-    if (!this.initialized) {
-      this.audioContext = new AudioContext();
-      this.initialized = true;
-      this.mainGainNode = this.audioContext.createGain();
-      this.mainGainNode.gain.value = 0.05;
+  #init() {
+    this.mainGainNode = this.audioContext.createGain();
+    this.mainGainNode.gain.value = 0.04;
 
-      this.vibratoNode = new VibratoNode(this.audioContext);
-      this.mainGainNode.connect(this.vibratoNode);
-      this.vibratoNode.connect(this.audioContext.destination);
+    this.vibratoNode = new VibratoNode(this.audioContext);
+    this.mainGainNode.connect(this.vibratoNode);
+    this.vibratoNode.connect(this.audioContext.destination);
 
-      this.toneWheels = ToneWheels.map(({ frequency }) => {
-        const gainNode = this.audioContext.createGain();
-        gainNode.connect(this.mainGainNode);
-        gainNode.gain.value = 0;
-        const percussionGainNode = this.audioContext.createGain();
-        percussionGainNode.connect(this.mainGainNode);
-        percussionGainNode.gain.value = 0;
+    this.toneWheels = ToneWheels.map(({ frequency }) => {
+      const gainNode = this.audioContext.createGain();
+      gainNode.connect(this.mainGainNode);
+      gainNode.gain.value = 0;
+      const percussionGainNode = this.audioContext.createGain();
+      percussionGainNode.connect(this.mainGainNode);
+      percussionGainNode.gain.value = 0;
 
-        const osc = this.audioContext.createOscillator();
-        osc.connect(gainNode);
-        osc.connect(percussionGainNode);
-        osc.type = "sine";
-        osc.frequency.value = frequency;
-        osc.start();
+      const osc = this.audioContext.createOscillator();
+      osc.connect(gainNode);
+      osc.connect(percussionGainNode);
+      osc.type = "sine";
+      osc.frequency.value = frequency;
+      osc.start();
 
-        return {
-          osc,
-          gainNode,
-          percussionGainNode,
-        };
-      });
-    }
+      return {
+        osc,
+        gainNode,
+        percussionGainNode,
+      };
+    });
   }
 
   updateGains() {
@@ -118,8 +115,6 @@ class Synth {
   }
 
   playMidiNote(midiNote) {
-    this.init();
-
     if (isManualKey(midiNote) && !this.isPlaying(midiNote)) {
       this.startPercussion(midiNote);
       this.notesPlaying.add(midiNote);
@@ -128,25 +123,19 @@ class Synth {
   }
 
   stopMidiNote(midiNote) {
-    if (this.initialized) {
-      this.notesPlaying.delete(midiNote);
-      if (this.notesPlaying.size === 0) {
-        this.percussionLatch.release();
-      }
-      this.stopPercussion(midiNote);
-      this.updateGains();
+    this.notesPlaying.delete(midiNote);
+    if (this.notesPlaying.size === 0) {
+      this.percussionLatch.release();
     }
+    this.stopPercussion(midiNote);
+    this.updateGains();
   }
 
   setDrawbar(index, value) {
-    this.init();
-
     this.drawbarValues[index] = value;
   }
 
   enableVibrato(value) {
-    this.init();
-
     if (value) {
       this.mainGainNode.disconnect();
       this.mainGainNode.connect(this.vibratoNode);
@@ -157,8 +146,6 @@ class Synth {
   }
 
   setVibratoMode(mode) {
-    this.init();
-
     this.vibratoNode.setMode(mode);
   }
 }

@@ -1,5 +1,13 @@
 import { isManualKey } from "./definitions.js";
 
+export const ControllerEvents = {
+  PLAY_MIDI_NOTE: "playmidinote",
+  STOP_MIDI_NOTE: "stopmidinote",
+  ENABLE_VIBRATO: "enablevibrato",
+  SET_VIBRATO_MODE: "setvibratomode",
+  SET_DRAWBAR: "setdrawbar",
+};
+
 class Controller {
   constructor() {
     this.handlers = {};

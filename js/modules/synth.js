@@ -97,7 +97,7 @@ class Synth {
 
       // experimenting with setting directly both here and on stop, because it
       // seems like the setValueAtTime calls fight otherwise, to weird effect
-      gainNode.gain.linearRampToValueAtTime(1.5, now + 0.01);
+      gainNode.gain.linearRampToValueAtTime(2.0, now + 0.01);
       gainNode.gain.linearRampToValueAtTime(0.0, now + 0.4);
     });
   }

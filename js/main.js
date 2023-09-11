@@ -14,7 +14,8 @@ const init = () => {
   new KeyboardHammondInput(controller);
   new MidiHammondInput(controller);
   Drawbars.forEach((bar, index) => {
-    controller.setDrawbar(index, index < 4 ? 8 : 0);
+    // controller.setDrawbar(index, index < 4 ? 8 : 0);
+    controller.setDrawbar(index, 0);
   });
 };
 

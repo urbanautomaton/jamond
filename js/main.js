@@ -7,8 +7,12 @@ import HammondUI from "./modules/hammond_ui.js";
 
 const controller = new Controller();
 const audioContext = new AudioContext();
+const keyboard = document.querySelector("#keyboard");
+const initButton = document.querySelector("button#init");
 
 const init = () => {
+  initButton.remove();
+
   new Synth(controller, audioContext);
   new HammondUI(document.getElementById("keyboard"), controller);
   new KeyboardHammondInput(controller);
@@ -19,16 +23,11 @@ const init = () => {
   });
 };
 
-const keyboard = document.querySelector("#keyboard");
-const button = document.querySelector("button#init");
-
 if (audioContext.state === "running") {
-  button.remove();
   init();
 } else {
-  button.onclick = () => {
+  initButton.onclick = () => {
     audioContext.resume().then(() => {
-      button.remove();
       init();
     });
   };

@@ -1,9 +1,6 @@
-* {
-  box-sizing: border-box;
-}
-
 body {
   font-size: 18px;
+  margin: 1em;
   font-family: "Open Sans", "Lucida Grande", "Arial", sans-serif;
 }
 

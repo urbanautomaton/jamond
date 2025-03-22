@@ -4,12 +4,6 @@ body {
   font-family: "Open Sans", "Lucida Grande", "Arial", sans-serif;
 }
 
-.header {
-  padding: 0.5em;
-  margin: 0.5em 0;
-  background-color: silver;
-}
-
 .keyboard {
   display: inline-block;
   overflow: auto;

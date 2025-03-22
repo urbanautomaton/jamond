@@ -13,19 +13,19 @@ const init = () => {
   new HammondUI(document.getElementById("keyboard"), controller);
   new KeyboardHammondInput(controller);
   new MidiHammondInput(controller);
+
   Drawbars.forEach((bar, index) => {
     controller.setDrawbar(index, index < 4 ? 8 : 0);
   });
 };
 
+const keyboard = document.querySelector("#keyboard");
+const button = document.querySelector("button#init");
+
 if (audioContext.state === "running") {
+  button.remove();
   init();
 } else {
-  const button = document.createElement("button");
-  button.innerText = "Jamón feel the noize";
-  const keyboard = document.querySelector("#keyboard");
-  keyboard.append(button);
-
   button.onclick = () => {
     audioContext.resume().then(() => {
       button.remove();

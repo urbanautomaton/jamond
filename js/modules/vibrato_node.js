@@ -1,4 +1,4 @@
-import { VibratoModes } from "./definitions.js";
+import { VibratoModes } from './definitions.js';
 
 const MAX_DELAY_SEC = 0.001;
 const VIBRATO_PACE_HZ = 412 / 60;
@@ -44,9 +44,9 @@ class VibratoNode extends GainNode {
     }
 
     let modeType, level;
-    [modeType, level] = mode.split("-");
+    [modeType, level] = mode.split('-');
 
-    if (modeType === "V") {
+    if (modeType === 'V') {
       // Vibrato only
       this.chorusGain.gain.value = 0;
       this.vibratoGain.gain.value = 1;
@@ -56,8 +56,7 @@ class VibratoNode extends GainNode {
       this.vibratoGain.gain.value = 0.5;
     }
 
-    this.vibratoAmplitude.gain.value =
-      (parseInt(level) / 3) * (MAX_DELAY_SEC / 2);
+    this.vibratoAmplitude.gain.value = (parseInt(level) / 3) * (MAX_DELAY_SEC / 2);
   }
 }
 

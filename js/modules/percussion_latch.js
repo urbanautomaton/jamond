@@ -8,10 +8,7 @@ class PercussionLatch {
 
   try(cb) {
     if (!this.latched) {
-      this.latchTimeoutId = window.setTimeout(
-        () => (this.latched = true),
-        LATCH_DELAY_MS
-      );
+      this.latchTimeoutId = window.setTimeout(() => (this.latched = true), LATCH_DELAY_MS);
 
       cb();
     }

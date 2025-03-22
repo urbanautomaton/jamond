@@ -9,7 +9,7 @@ class MidiHammondInput {
     this.midiAccess = null;
 
     if (navigator.requestMidiAccess === null) {
-      console.log("MIDI input not supported by this browser.");
+      console.log('MIDI input not supported by this browser.');
       return;
     }
 
@@ -17,13 +17,13 @@ class MidiHammondInput {
       (midiAccess) => {
         this.midiAccess = midiAccess;
         this.midiAccess.inputs.forEach((entry) => {
-          console.log("MIDI ready!");
+          console.log('MIDI ready!');
           entry.onmidimessage = (event) => this.onMIDIMessage(event);
         });
       },
       (msg) => {
         console.error(`Failed to get MIDI access - ${msg}`);
-      }
+      },
     );
   }
 

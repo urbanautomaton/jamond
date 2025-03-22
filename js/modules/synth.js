@@ -1,11 +1,6 @@
-import {
-  ToneWheels,
-  ManualKeys,
-  Drawbars,
-  isManualKey,
-} from "./definitions.js";
-import PercussionLatch from "./percussion_latch.js";
-import VibratoNode from "./vibrato_node.js";
+import { ToneWheels, ManualKeys, Drawbars, isManualKey } from './definitions.js';
+import PercussionLatch from './percussion_latch.js';
+import VibratoNode from './vibrato_node.js';
 
 class Synth {
   constructor(controller, audioContext) {
@@ -17,17 +12,11 @@ class Synth {
     this.drawbarValues = new Array(Drawbars.length).fill(8);
     this.percussionLatch = new PercussionLatch();
 
-    controller.on("playmidinote", (midiNote) => this.playMidiNote(midiNote));
-    controller.on("stopmidinote", (midiNote) => this.stopMidiNote(midiNote));
-    controller.on("setdrawbar", (index, value) => {
-      this.setDrawbar(index, value);
-    });
-    controller.on("enablevibrato", (value) => {
-      this.enableVibrato(value);
-    });
-    controller.on("setvibratomode", (mode) => {
-      this.setVibratoMode(mode);
-    });
+    controller.on('playmidinote', (midiNote) => this.playMidiNote(midiNote));
+    controller.on('stopmidinote', (midiNote) => this.stopMidiNote(midiNote));
+    controller.on('setdrawbar', (index, value) => this.setDrawbar(index, value));
+    controller.on('enablevibrato', (value) => this.enableVibrato(value));
+    controller.on('setvibratomode', (mode) => this.setVibratoMode(mode));
   }
 
   #init() {
@@ -49,7 +38,7 @@ class Synth {
       const osc = this.audioContext.createOscillator();
       osc.connect(gainNode);
       osc.connect(percussionGainNode);
-      osc.type = "sine";
+      osc.type = 'sine';
       osc.frequency.value = frequency;
       osc.start();
 

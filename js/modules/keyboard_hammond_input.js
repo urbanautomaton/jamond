@@ -19,23 +19,23 @@ class KeyboardHammondInput {
     this.controller = controller;
 
     document.addEventListener(
-      "keydown",
+      'keydown',
       (e) => {
         if (keyMap.hasOwnProperty(e.key)) {
           this.controller.playMidiNote(keyMap[e.key].midiNote);
         }
       },
-      false
+      false,
     );
 
     document.addEventListener(
-      "keyup",
+      'keyup',
       (e) => {
         if (keyMap.hasOwnProperty(e.key)) {
           this.controller.stopMidiNote(keyMap[e.key].midiNote);
         }
       },
-      false
+      false,
     );
   }
 }

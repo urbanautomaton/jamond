@@ -1,14 +1,14 @@
-import Controller, { ControllerEvents } from "./controller.js";
+import Controller, { ControllerEvents } from './controller.js';
 
-QUnit.module("Controller", () => {
+QUnit.module('Controller', () => {
   let controller;
 
   QUnit.testStart(() => {
     controller = new Controller();
   });
 
-  QUnit.module("event handlers", () => {
-    QUnit.test("registering a handler", (assert) => {
+  QUnit.module('event handlers', () => {
+    QUnit.test('registering a handler', (assert) => {
       let fired = false;
       controller.on(ControllerEvents.PLAY_MIDI_NOTE, () => {
         fired = true;
@@ -16,7 +16,7 @@ QUnit.module("Controller", () => {
 
       controller.trigger(ControllerEvents.PLAY_MIDI_NOTE);
 
-      QUnit.assert.true(fired, "event fired");
+      QUnit.assert.true(fired, 'event fired');
     });
   });
 });

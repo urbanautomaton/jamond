@@ -23,7 +23,7 @@ const buildDrawBar = (container, label) => {
 };
 
 class Drawbar {
-  constructor(container, label, index, controller) {
+  constructor(container, label, index, synth) {
     buildDrawBar(container, label);
 
     container.addEventListener('mousedown', (e) => this.startDrag(e));
@@ -34,7 +34,7 @@ class Drawbar {
     this.container = container;
     this.dragging = false;
     this.index = index;
-    this.controller = controller;
+    this.synth = synth;
 
     window.setTimeout(() => {
       this.segmentHeight = container
@@ -43,7 +43,7 @@ class Drawbar {
       this.scrollToCurrentValue();
     }, 0);
 
-    this.controller.on('setdrawbar', (index, value) => {
+    this.synth.on('setdrawbar', ({ index, value }) => {
       if (this.index === index) {
         this.value = value;
         this.scrollToCurrentValue();
@@ -94,7 +94,7 @@ class Drawbar {
   setValue(value) {
     this.value = clampValue(value);
     this.container.dataset.value = this.value;
-    this.controller.setDrawbar(this.index, this.value);
+    this.synth.setDrawbar(this.index, this.value);
   }
 }
 

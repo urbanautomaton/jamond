@@ -2,8 +2,9 @@ import { ToneWheels, ManualKeys, Drawbars, isManualKey } from './definitions.js'
 import PercussionLatch from './percussion_latch.js';
 import VibratoNode from './vibrato_node.js';
 
-class Synth {
+class Synth extends EventTarget {
   constructor(audioContext) {
+    super();
     this.audioContext = audioContext;
 
     this.#init();
@@ -102,10 +103,12 @@ class Synth {
       this.startPercussion(midiNote);
       this.notesPlaying.add(midiNote);
       this.updateGains();
+      this.#emit('playmidinote', { midiNote });
     }
   }
 
   stopMidiNote(midiNote) {
+    this.#emit('stopmidinote', { midiNote });
     this.notesPlaying.delete(midiNote);
     if (this.notesPlaying.size === 0) {
       this.percussionLatch.release();
@@ -115,6 +118,7 @@ class Synth {
   }
 
   setDrawbar(index, value) {
+    this.#emit('setdrawbar', { index, value });
     this.drawbarValues[index] = value;
   }
 
@@ -130,6 +134,14 @@ class Synth {
 
   setVibratoMode(mode) {
     this.vibratoNode.setMode(mode);
+  }
+
+  on(eventName, cb) {
+    this.addEventListener(eventName, ({ detail }) => cb(detail));
+  }
+
+  #emit(eventName, detail) {
+    this.dispatchEvent(new CustomEvent(eventName, { detail }));
   }
 }
 

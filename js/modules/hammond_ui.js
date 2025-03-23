@@ -16,9 +16,9 @@ const createElement = (elementType, parent, attributes, cb = () => {}) => {
 });
 
 class HammondUI {
-  constructor(container, controller) {
+  constructor(container, synth) {
     this.container = container;
-    this.controller = controller;
+    this.synth = synth;
 
     this.container.div({ className: 'controls' }, (controls) => {
       controls.div({ className: 'vibratoControls' }, (vibratoControls) => {
@@ -26,7 +26,7 @@ class HammondUI {
           { name: 'vibratoEnabled', type: 'checkbox', checked: true },
           (vibratoEnabled) => {
             vibratoEnabled.onchange = (event) => {
-              this.controller.enableVibrato(event.target.checked);
+              this.synth.enableVibrato(event.target.checked);
             };
           },
         );
@@ -41,7 +41,7 @@ class HammondUI {
             vibratoMode.option({ value: mode, innerText: mode });
           });
           vibratoMode.onchange = (event) => {
-            this.controller.setVibratoMode(event.target.value);
+            this.synth.setVibratoMode(event.target.value);
           };
           vibratoMode.value = 'C-3';
         });
@@ -55,17 +55,17 @@ class HammondUI {
       controls.div({ className: 'drawbars' }, (drawbars) => {
         Drawbars.forEach(({ label, color }, index) => {
           drawbars.div({ className: `drawbar ${color}` }, (drawbar) => {
-            new Drawbar(drawbar, label, index, controller);
+            new Drawbar(drawbar, label, index, synth);
           });
         });
       });
 
       controls.div({ className: 'keys' }, (keys) => {
-        this.controller.on('playmidinote', (midiNote) => {
+        this.synth.on('playmidinote', ({ midiNote }) => {
           keys.querySelector(`[data-midi-note="${midiNote}"]`).classList.add('pressed');
         });
 
-        this.controller.on('stopmidinote', (midiNote) => {
+        this.synth.on('stopmidinote', ({ midiNote }) => {
           keys.querySelector(`[data-midi-note="${midiNote}"]`).classList.remove('pressed');
         });
 
@@ -95,13 +95,13 @@ class HammondUI {
       return true;
     }
 
-    this.controller.playMidiNote(e.currentTarget.dataset.midiNote);
+    this.synth.playMidiNote(e.currentTarget.dataset.midiNote);
 
     e.preventDefault();
   }
 
   onKeyUp(e) {
-    this.controller.stopMidiNote(e.currentTarget.dataset.midiNote);
+    this.synth.stopMidiNote(e.currentTarget.dataset.midiNote);
 
     e.preventDefault();
   }

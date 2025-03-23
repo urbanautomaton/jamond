@@ -15,14 +15,14 @@ const keyMap = {
 };
 
 class KeyboardHammondInput {
-  constructor(controller) {
-    this.controller = controller;
+  constructor(synth) {
+    this.synth = synth;
 
     document.addEventListener(
       'keydown',
       (e) => {
         if (keyMap.hasOwnProperty(e.key)) {
-          this.controller.playMidiNote(keyMap[e.key].midiNote);
+          this.synth.playMidiNote(keyMap[e.key].midiNote);
         }
       },
       false,
@@ -32,7 +32,7 @@ class KeyboardHammondInput {
       'keyup',
       (e) => {
         if (keyMap.hasOwnProperty(e.key)) {
-          this.controller.stopMidiNote(keyMap[e.key].midiNote);
+          this.synth.stopMidiNote(keyMap[e.key].midiNote);
         }
       },
       false,

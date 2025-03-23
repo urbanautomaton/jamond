@@ -9,7 +9,8 @@ export const ControllerEvents = {
 };
 
 class Controller {
-  constructor() {
+  constructor(synth) {
+    this.synth = synth;
     this.handlers = {};
   }
 
@@ -24,25 +25,30 @@ class Controller {
 
   playMidiNote(midiNote) {
     if (isManualKey(midiNote)) {
+      this.synth.playMidiNote(midiNote);
       this.trigger('playmidinote', midiNote);
     }
   }
 
   stopMidiNote(midiNote) {
     if (isManualKey(midiNote)) {
+      this.synth.stopMidiNote(midiNote);
       this.trigger('stopmidinote', midiNote);
     }
   }
 
   enableVibrato(value) {
+    this.synth.enableVibrato(value);
     this.trigger('enablevibrato', value);
   }
 
   setVibratoMode(mode) {
+    this.synth.setVibratoMode(mode);
     this.trigger('setvibratomode', mode);
   }
 
   setDrawbar(index, value) {
+    this.synth.setDrawbar(index, value);
     this.trigger('setdrawbar', index, value);
   }
 }

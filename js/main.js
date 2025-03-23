@@ -5,7 +5,6 @@ import MidiHammondInput from './modules/midi_hammond_input.js';
 import KeyboardHammondInput from './modules/keyboard_hammond_input.js';
 import HammondUI from './modules/hammond_ui.js';
 
-const controller = new Controller();
 const audioContext = new AudioContext();
 const keyboard = document.querySelector('#keyboard');
 const initButton = document.querySelector('button#init');
@@ -13,7 +12,9 @@ const initButton = document.querySelector('button#init');
 const init = () => {
   initButton.remove();
 
-  new Synth(controller, audioContext);
+  const synth = new Synth(audioContext);
+  const controller = new Controller(synth);
+
   new HammondUI(document.getElementById('keyboard'), controller);
   new KeyboardHammondInput(controller);
   new MidiHammondInput(controller);

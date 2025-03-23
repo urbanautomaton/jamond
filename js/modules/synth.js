@@ -3,7 +3,7 @@ import PercussionLatch from './percussion_latch.js';
 import VibratoNode from './vibrato_node.js';
 
 class Synth {
-  constructor(controller, audioContext) {
+  constructor(audioContext) {
     this.audioContext = audioContext;
 
     this.#init();
@@ -11,12 +11,6 @@ class Synth {
     this.notesPlaying = new Set();
     this.drawbarValues = new Array(Drawbars.length).fill(8);
     this.percussionLatch = new PercussionLatch();
-
-    controller.on('playmidinote', (midiNote) => this.playMidiNote(midiNote));
-    controller.on('stopmidinote', (midiNote) => this.stopMidiNote(midiNote));
-    controller.on('setdrawbar', (index, value) => this.setDrawbar(index, value));
-    controller.on('enablevibrato', (value) => this.enableVibrato(value));
-    controller.on('setvibratomode', (mode) => this.setVibratoMode(mode));
   }
 
   #init() {

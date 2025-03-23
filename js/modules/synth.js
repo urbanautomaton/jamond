@@ -7,14 +7,6 @@ class Synth extends EventTarget {
     super();
     this.audioContext = audioContext;
 
-    this.#init();
-
-    this.notesPlaying = new Set();
-    this.drawbarValues = new Array(Drawbars.length).fill(8);
-    this.percussionLatch = new PercussionLatch();
-  }
-
-  #init() {
     this.mainGainNode = this.audioContext.createGain();
     this.mainGainNode.gain.value = 0.04;
 
@@ -43,6 +35,10 @@ class Synth extends EventTarget {
         percussionGainNode,
       };
     });
+
+    this.notesPlaying = new Set();
+    this.drawbarValues = new Array(Drawbars.length).fill(8);
+    this.percussionLatch = new PercussionLatch();
   }
 
   updateGains() {

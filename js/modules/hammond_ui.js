@@ -76,10 +76,10 @@ class HammondUI {
           keys.div({ className: `key ${keyClassName} ${keyColor}` }, (keyElement) => {
             Object.assign(keyElement.dataset, { midiNote });
 
-            keyElement.onmousedown = (e) => this.onKeyDown(e);
-            keyElement.onmouseenter = (e) => this.onKeyDown(e);
-            keyElement.onmouseup = (e) => this.onKeyUp(e);
-            keyElement.onmouseleave = (e) => this.onKeyUp(e);
+            keyElement.onmousedown = (e) => this.onMouseDown(e);
+            keyElement.onmouseenter = (e) => this.onMouseEnter(e);
+            keyElement.onmouseup = (e) => this.onMouseUp(e);
+            keyElement.onmouseleave = (e) => this.onMouseLeave(e);
 
             keyElement.div({ className: 'label' }, (labelElement) => {
               labelElement.innerHTML = `${name}<sub>${octave}</sub>`;
@@ -90,11 +90,37 @@ class HammondUI {
     });
   }
 
-  onKeyDown(e) {
-    if (!(e.buttons & 1)) {
+  onMouseEnter(e) {
+    if (this.dragging) {
+      this.onKeyDown(e);
+    }
+  }
+
+  onMouseLeave(e) {
+    if (this.dragging) {
+      this.onKeyUp(e);
+    }
+  }
+
+  onMouseDown(e) {
+    if (this.dragging || !(e.buttons & 1)) {
       return true;
     }
 
+    this.dragging = true;
+    this.onKeyDown(e);
+  }
+
+  onMouseUp(e) {
+    if (!this.dragging || e.buttons & 1) {
+      return true;
+    }
+
+    this.dragging = false;
+    this.onKeyUp(e);
+  }
+
+  onKeyDown(e) {
     this.synth.playMidiNote(e.currentTarget.dataset.midiNote);
 
     e.preventDefault();

@@ -25,9 +25,7 @@ const init = () => {
 if (audioContext.state === 'running') {
   init();
 } else {
-  const initListener = () => {
-    audioContext.resume().then(init);
-  };
+  const initListener = () => audioContext.resume().then(init);
 
   document.addEventListener('keydown', initListener, { once: true });
   initButton.onclick = initListener;
